@@ -39,41 +39,36 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
    ```
    The static files will be generated in the `out/` directory.
 
-## 📦 How to Push to GitHub
+## 📦 Connecting to GitHub
 
-If your `git push` failed, follow these exact steps to ensure a clean setup for the **color-dash-blitz** repository:
+To upload your code to GitHub, follow these exact steps for the **color-dash-blitz** repository:
 
-1. **Initialize the Repository**:
+1. **Initialize Git**:
    ```bash
    git init
    ```
 
-2. **Add Your Files**:
+2. **Stage and Commit**:
    ```bash
    git add .
-   ```
-
-3. **Commit the Code**:
-   ```bash
    git commit -m "Initial release of Color Dash Blitz"
    ```
 
-4. **Create a Remote**:
-   Go to GitHub, create a **new empty repository** named `color-dash-blitz`, and copy the URL. Then run:
+3. **Link to GitHub**:
+   Go to [GitHub](https://github.com/new) and create a new repository named `color-dash-blitz`. Do **not** initialize it with a README or License. Then run:
    ```bash
-   git remote add origin https://github.com/your-username/color-dash-blitz.git
+   git remote add origin https://github.com/YOUR_USERNAME/color-dash-blitz.git
    ```
 
-5. **Push to Main**:
+4. **Push the Code**:
    ```bash
    git branch -M main
    git push -u origin main
    ```
 
-### Common Push Errors:
-- **"Remote origin already exists"**: Run `git remote remove origin` and try step 4 again.
-- **"Permission denied"**: Ensure you have SSH keys set up or use a Personal Access Token for HTTPS.
-- **"Updates were rejected"**: This usually means the remote repository isn't empty. Try `git push -f origin main` only if you are sure you want to overwrite the remote.
+### Troubleshooting:
+- **"Remote origin already exists"**: Run `git remote remove origin` and try Step 3 again.
+- **Authentication failed**: Ensure you have a GitHub Personal Access Token (PAT) configured or use SSH.
 
 ## 📄 License
 
