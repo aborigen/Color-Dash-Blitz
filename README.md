@@ -41,7 +41,7 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
 
 ## 📦 How to Push to GitHub
 
-If your `git push` failed, follow these exact steps to ensure a clean setup:
+If your `git push` failed, follow these exact steps to ensure a clean setup for the **color-dash-blitz** repository:
 
 1. **Initialize the Repository**:
    ```bash
@@ -59,9 +59,9 @@ If your `git push` failed, follow these exact steps to ensure a clean setup:
    ```
 
 4. **Create a Remote**:
-   Go to GitHub, create a **new empty repository**, and copy the URL. Then run:
+   Go to GitHub, create a **new empty repository** named `color-dash-blitz`, and copy the URL. Then run:
    ```bash
-   git remote add origin <YOUR_REPOSITORY_URL>
+   git remote add origin https://github.com/your-username/color-dash-blitz.git
    ```
 
 5. **Push to Main**:
