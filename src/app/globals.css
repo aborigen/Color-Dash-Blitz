@@ -51,6 +51,10 @@
     @apply border-border;
     -webkit-tap-highlight-color: transparent;
   }
+  html, body {
+    @apply h-full overflow-hidden;
+    overscroll-behavior: none;
+  }
   body {
     @apply bg-background text-foreground font-body;
     user-select: none;
