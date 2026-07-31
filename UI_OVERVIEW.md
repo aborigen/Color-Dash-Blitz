@@ -1,3 +1,4 @@
+
 # Color Dash Blitz - Game UI & Visual Logic
 
 ## 🎨 Design Philosophy
@@ -10,6 +11,7 @@ Located at the center of the "Playing" state, this is the player's primary focus
 - **Visuals**: A large, rounded square (`rounded-[2.5rem]`) displaying the target color.
 - **Context**: Below the square, the color's name is displayed in localized text (via `tColor`) with high tracking (`tracking-[0.2em]`) for an architectural, modern feel.
 - **Animations**: Triggers the `game-bounce` animation when a correct match is made, providing instant satisfaction.
+- **Constraint Management**: Uses `flex-1` and `min-h-0` to automatically shrink on shorter screens, ensuring the color grid remains fully visible.
 
 ### 2. Dynamic Choice Grid
 The grid at the bottom of the screen adapts in real-time as the player progresses.
@@ -23,7 +25,7 @@ The grid at the bottom of the screen adapts in real-time as the player progresse
 
 ### 4. Game Over Insight Panel
 - **Score Card**: A massive, high-contrast card that highlights the final achievement.
-- **AI Fact Box**: A semi-transparent, backdrop-blurred container that displays unique facts from the `aiCreatedColorFactFlow`. It features a "Color Fact" tag with a `secondary` background to draw attention.
+- **AI Fact Box**: A semi-transparent, backdrop-blurred container that displays unique facts from the `aiCreatedColorFactFlow`. It features a "Color Fact" tag with a `secondary` background to draw attention. It is capped at `25dvh` to prevent overlapping other elements.
 
 ## ⚡ Feedback & Sensory Systems
 
@@ -32,6 +34,7 @@ The grid at the bottom of the screen adapts in real-time as the player progresse
 - **Wrong Match**: The entire game container triggers a `game-shake` animation, and the timer bar flashes red (time penalty).
 
 ### Mobile Optimization
+- **Overlap Prevention**: Global controls (Mute, Language) are positioned at the top corners to avoid interfering with high-speed grid interactions. The color grid is prioritized as a `shrink-0` element.
 - **Dynamic Viewports**: We use `h-[100dvh]` (Dynamic Viewport Height) to ensure the UI elements are always framed correctly, even when mobile browser toolbars appear or disappear.
 - **Touch Protection**: All UI elements have `-webkit-touch-callout: none` and `user-select: none` to prevent the OS from interrupting fast-paced gameplay with magnifying glasses or context menus.
 

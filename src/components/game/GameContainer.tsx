@@ -1,8 +1,9 @@
+
 "use client"
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX } from 'lucide-react';
+import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages } from 'lucide-react';
 import { initYandexSDK, showFullscreenAd, submitScoreToLeaderboard, fetchRemoteConfig, YandexSDK, getLanguage } from '@/lib/yandex-sdk';
 import { t, tColor, Language } from '@/lib/i18n';
 import { getRandomFact } from '@/lib/facts';
@@ -193,6 +194,19 @@ export default function GameContainer() {
       <div className="absolute top-[-5%] left-[-5%] w-[30%] h-[30%] bg-primary/10 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-3xl -z-10" />
 
+      {/* Global Controls - Positioned to avoid overlapping center target */}
+      <div className="absolute top-4 left-4 z-20">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={toggleLanguage} 
+          className="rounded-full bg-white/50 backdrop-blur hover:bg-white/80 h-8 sm:h-9 px-2 sm:px-3 shadow-sm border border-white/20 font-black text-[10px] flex gap-2 items-center"
+        >
+          <Languages className="w-3.5 h-3.5 text-secondary" />
+          <span className="uppercase">{lang}</span>
+        </Button>
+      </div>
+
       <div className="absolute top-4 right-4 z-20">
         <Button 
           variant="ghost" 
@@ -201,17 +215,6 @@ export default function GameContainer() {
           className="rounded-full bg-white/50 backdrop-blur hover:bg-white/80 h-8 w-8 sm:h-9 sm:w-9 shadow-sm border border-white/20"
         >
           {isMuted ? <VolumeX className="w-4 h-4 text-muted-foreground" /> : <Volume2 className="w-4 h-4 text-primary" />}
-        </Button>
-      </div>
-
-      <div className="absolute bottom-4 right-4 z-30">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={toggleLanguage} 
-          className="rounded-full bg-white/70 backdrop-blur-md hover:bg-white/90 h-8 sm:h-9 px-2 sm:px-3 shadow-xl border border-white/30 font-black text-[10px] flex gap-2 items-center"
-        >
-          <span className="uppercase">{lang}</span>
         </Button>
       </div>
 
@@ -255,8 +258,9 @@ export default function GameContainer() {
       )}
 
       {gameState === 'PLAYING' && level && (
-        <div className={`w-full h-full flex flex-col justify-between py-2 sm:py-4 ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
-          <div className="w-full flex justify-between items-center px-1 shrink-0">
+        <div className={`w-full h-full flex flex-col justify-between py-2 sm:py-4 overflow-hidden ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
+          {/* HUD Area */}
+          <div className="w-full flex justify-between items-center px-1 shrink-0 pt-10 sm:pt-0">
              <div className="bg-white/80 backdrop-blur px-2.5 py-1 rounded-full shadow-lg flex items-center gap-2 border border-primary/10">
                 <Trophy className="w-3.5 h-3.5 text-secondary" />
                 <span className="text-base font-black text-foreground tabular-nums">{score}</span>
@@ -271,12 +275,13 @@ export default function GameContainer() {
              </div>
           </div>
 
+          {/* Target Match Area - Flex-1 and min-h-0 allows it to shrink on small screens */}
           <div className="flex-1 flex flex-col items-center justify-center space-y-2 sm:space-y-4 min-h-0 py-2">
             <div className="text-center shrink-0">
               <h2 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{t(lang, 'matchThis')}</h2>
             </div>
             
-            <div className="relative flex-1 flex items-center justify-center max-h-[150px] sm:max-h-none">
+            <div className="relative flex-1 flex items-center justify-center min-h-0 max-h-[150px] sm:max-h-none overflow-hidden">
               <div className="absolute -inset-4 bg-white/40 blur-2xl rounded-full" />
               <div 
                 className={`w-16 h-16 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
@@ -292,7 +297,8 @@ export default function GameContainer() {
             <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
           </div>
 
-          <div key={level.id} className={`w-full grid ${getGridClasses(level.choices.length)} gap-2 sm:gap-4 pb-8 sm:pb-16 px-1 shrink-0`}>
+          {/* Grid Area - shrink-0 ensures buttons remain interactive and don't squash */}
+          <div key={level.id} className={`w-full grid ${getGridClasses(level.choices.length)} gap-2 sm:gap-4 pb-4 sm:pb-8 px-1 shrink-0`}>
             {level.choices.map((choice, i) => (
               <button
                 key={`${choice.name}-${i}`}
@@ -308,7 +314,7 @@ export default function GameContainer() {
       )}
 
       {gameState === 'GAMEOVER' && (
-        <div className="flex flex-col items-center justify-center h-full w-full space-y-3 sm:space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden">
+        <div className="flex flex-col items-center justify-center h-full w-full space-y-3 sm:space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden pt-12 sm:pt-0">
           <div className="bg-white p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full text-center relative overflow-hidden shrink-0">
             <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-primary/5 rounded-full -mr-8 -mt-8 sm:-mr-12 sm:-mt-12" />
             <h2 className="text-sm sm:text-2xl font-black text-foreground mb-1 sm:mb-4 uppercase tracking-tight">{t(lang, 'blitzOver')}</h2>
