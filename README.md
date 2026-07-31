@@ -7,18 +7,18 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
 - **Fast-Paced Gameplay**: High-intensity matching that tests your speed and precision.
 - **Dynamic Difficulty**: The game scales from 3 to 12 color choices with an accelerating timer.
 - **AI Color Facts**: Receive unique color theory facts after every game session.
-- **Immersive Audio**: High-energy sound effects for every game action with a mute toggle.
+- **Immersive Audio**: Built-in audio synthesizer for platform-compliant sound effects.
 - **Yandex Games Integration**: Built-in support for Remote Config, full-screen ads, and global leaderboards.
-- **Responsive Design**: Optimized with `dvh` units for a perfect "no-scroll" experience on smartphone portrait screens.
+- **Responsive Design**: Optimized for a perfect "no-scroll" experience on all screens.
 - **Static Export**: Fully compatible with static hosting (Yandex Games, GitHub Pages).
 
 ## 🛠 Tech Stack
 
 - **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
-- **AI Implementation**: [Genkit](https://firebase.google.com/docs/genkit) (for fact generation during development)
+- **AI Implementation**: [Genkit](https://firebase.google.com/docs/genkit)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components**: [ShadCN UI](https://ui.shadcn.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
+- **Audio**: Web Audio API (Internal Synthesizer)
 - **Platform**: Yandex Games SDK
 
 ## 🏁 Getting Started
@@ -33,15 +33,23 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
    npm run dev
    ```
 
-3. Build the static version:
+3. Build and archive for publishing:
    ```bash
-   npm run build
+   npm run archive
    ```
-   The static files will be generated in the `out/` directory.
+   This will generate a `game.zip` file in the root directory.
 
-## 📦 Connecting to GitHub
+## 📦 Publishing
 
-To upload your code to GitHub, follow these exact steps for the **color-dash-blitz** repository:
+To publish your game to Yandex Games or other static hosts:
+
+1. Run `npm run archive`.
+2. Locate the `game.zip` file in your project root.
+3. Upload `game.zip` to the platform console.
+
+## 🔗 Connecting to GitHub
+
+To upload your code to GitHub:
 
 1. **Initialize Git**:
    ```bash
@@ -55,7 +63,7 @@ To upload your code to GitHub, follow these exact steps for the **color-dash-bli
    ```
 
 3. **Link to GitHub**:
-   Go to [GitHub](https://github.com/new) and create a new repository named `color-dash-blitz`. Do **not** initialize it with a README or License. Then run:
+   Go to [GitHub](https://github.com/new) and create a new repository named `color-dash-blitz`. Then run:
    ```bash
    git remote add origin https://github.com/YOUR_USERNAME/color-dash-blitz.git
    ```
@@ -65,10 +73,6 @@ To upload your code to GitHub, follow these exact steps for the **color-dash-bli
    git branch -M main
    git push -u origin main
    ```
-
-### Troubleshooting:
-- **"Remote origin already exists"**: Run `git remote remove origin` and try Step 3 again.
-- **Authentication failed**: Ensure you have a GitHub Personal Access Token (PAT) configured or use SSH.
 
 ## 📄 License
 
