@@ -1,44 +1,42 @@
-# Color Dash Blitz - UI Components & Project Overview
+# Color Dash Blitz - Game UI & Visual Logic
 
-## 🎨 Overview
-Color Dash Blitz is a high-intensity, hyper-casual color matching game designed for web platforms (specifically Yandex Games). It features dynamic difficulty, AI-powered color facts, and a self-contained audio system.
+## 🎨 Design Philosophy
+Color Dash Blitz utilizes a "Hyper-Casual Arcade" aesthetic. The UI is designed to be high-contrast, tactile, and extremely responsive. We prioritize immediate visual feedback and a "no-scroll" layout that fits any screen perfectly.
 
-## 🏗 Core Component: `GameContainer`
-The heart of the application, located at `src/components/game/GameContainer.tsx`. It manages:
-- **Game State**: Transitions between `START`, `PLAYING`, and `GAMEOVER`.
-- **Level Generation**: Dynamically scales difficulty (3 to 12 colors) based on score.
-- **Timer Logic**: An accelerating countdown that penalizes wrong answers.
-- **Yandex SDK Integration**: Handles fullscreen ads, global leaderboards ('leaders'), and remote configuration for feature toggles.
+## 🏗 Core Game UI Components
 
-## 🧱 UI Component Library (ShadCN)
-The project utilizes a tailored set of ShadCN components for a professional, consistent look:
-- **Button**: Used for all primary actions (Start, Retry, Mute, Language toggle). Enhanced with custom Tailwind shadows and active translation states for a "tactile" arcade feel.
-- **Progress**: The timer bar uses a custom gradient implementation (`from-primary to-secondary`) to provide smooth visual feedback on remaining time.
-- **Card**: Utilized in the Game Over screen to frame the final score and AI facts elegantly.
-- **Lucide Icons**: Integrated for intuitive navigation:
-    - `Zap`: Symbolizes the "Blitz" and speed.
-    - `Trophy`: Represents high scores and leaderboards.
-    - `Volume2 / VolumeX`: Indicates audio status.
-    - `RotateCcw`: The standard icon for retrying a session.
+### 1. The Target Indicator (Match Hub)
+Located at the center of the "Playing" state, this is the player's primary focus.
+- **Visuals**: A large, rounded square (`rounded-[2.5rem]`) displaying the target color.
+- **Context**: Below the square, the color's name is displayed in localized text (via `tColor`) with high tracking (`tracking-[0.2em]`) for an architectural, modern feel.
+- **Animations**: Triggers the `game-bounce` animation when a correct match is made, providing instant satisfaction.
 
-## 🔊 Audio Synthesizer (`AudioSynth`)
-A custom Web Audio API implementation (`src/lib/audio-synth.ts`) that replaces external MP3 dependencies:
-- **Correct Match**: An upward frequency ramp (C5 to C6) using sine waves.
-- **Wrong Match**: A downward sawtooth drone to signal error.
-- **Start/GameOver**: Specific triangle and square waveforms to set the mood without requiring external assets.
+### 2. Dynamic Choice Grid
+The grid at the bottom of the screen adapts in real-time as the player progresses.
+- **Scaling Logic**: The `getGridClasses` function dynamically switches between 2, 3, and 4 columns based on the difficulty level (3 to 12 choices).
+- **Tactile Feel**: Buttons use a "3D" effect with Tailwind shadows (`shadow-[0_3px_0_rgba(0,0,0,0.1)]`) and a physical translation (`active:translate-y-1`) when tapped.
+- **Interaction**: A white overlay (`opacity-20`) appears on tap to simulate a light-up button.
 
-## 🤖 AI Features
-- **Genkit Integration**: Uses the `aiCreatedColorFactFlow` to generate unique color facts via Google Gemini.
-- **Contextual Facts**: Facts can be requested based on the last color matched, providing an educational twist to the high-speed gameplay.
+### 3. HUD & Timer System
+- **Score Tracker**: A floating, pill-shaped badge in the top-left using the `secondary` accent color.
+- **The Blitz Bar**: A custom implementation of the ShadCN `Progress` component. It uses a `linear` transition and a gradient (`from-primary to-secondary`) to visualize the ticking clock. As the score increases, the "speed multiplier" makes this bar deplete faster.
 
-## 📱 Mobile Optimizations
-- **Responsiveness**: Uses `dvh` (dynamic viewport height) units to ensure a perfect fit on mobile screens with browser toolbars.
-- **Interaction Protection**: Contextual menus and touch callouts are disabled (`touch-none`, `user-select-none`) to ensure rapid tapping doesn't trigger OS-level popups.
-- **Static Export**: The project is configured with `trailingSlash: true` and `output: 'export'` for maximum compatibility with static hosts like Yandex Games.
+### 4. Game Over Insight Panel
+- **Score Card**: A massive, high-contrast card that highlights the final achievement.
+- **AI Fact Box**: A semi-transparent, backdrop-blurred container that displays unique facts from the `aiCreatedColorFactFlow`. It features a "Color Fact" tag with a `secondary` background to draw attention.
+
+## ⚡ Feedback & Sensory Systems
+
+### Visual Feedback
+- **Correct Match**: The screen pulses, the target indicator bounces, and a green "Zap" icon momentarily appears.
+- **Wrong Match**: The entire game container triggers a `game-shake` animation, and the timer bar flashes red (time penalty).
+
+### Mobile Optimization
+- **Dynamic Viewports**: We use `h-[100dvh]` (Dynamic Viewport Height) to ensure the UI elements are always framed correctly, even when mobile browser toolbars appear or disappear.
+- **Touch Protection**: All UI elements have `-webkit-touch-callout: none` and `user-select: none` to prevent the OS from interrupting fast-paced gameplay with magnifying glasses or context menus.
 
 ## 🚀 The Result
-A production-ready, static-exportable game that:
-1. **Loads instantly**: Zero external media dependencies (images or MP3s).
-2. **Scales difficulty**: Keeps players engaged by increasing complexity as they improve.
-3. **Platform Compliant**: Fully integrated with Yandex Games SDK features (Ads, Config, Leaderboards).
-4. **Polished UX**: Features smooth animations (`game-bounce`, `game-shake`) and a modern, high-contrast aesthetic.
+A robust, production-ready interface that:
+1. **Communicates Instantly**: Players know exactly what to do within 1 second of launching.
+2. **Rewards Speed**: Every correct tap is met with a symphony of visual and audio (via `AudioSynth`) feedback.
+3. **Adapts to Any Screen**: From legacy iPhones to ultrawide desktops, the game remains perfectly centered and interactive.
