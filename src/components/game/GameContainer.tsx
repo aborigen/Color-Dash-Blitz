@@ -179,15 +179,15 @@ export default function GameContainer() {
   const toggleLanguage = () => setLang(prev => prev === 'en' ? 'ru' : 'en');
 
   const getGridClasses = (count: number) => {
-    if (count >= 12) return 'grid-cols-3 sm:grid-cols-4';
-    if (count >= 8) return 'grid-cols-3';
-    if (count >= 5) return 'grid-cols-2 sm:grid-cols-3';
-    return 'grid-cols-2';
+    if (count >= 12) return 'grid-cols-4 landscape:grid-cols-4';
+    if (count >= 8) return 'grid-cols-3 landscape:grid-cols-4';
+    if (count >= 5) return 'grid-cols-2 sm:grid-cols-3 landscape:grid-cols-3';
+    return 'grid-cols-2 landscape:grid-cols-3';
   };
 
   return (
     <div 
-      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-2xl mx-auto relative overflow-hidden bg-background select-none touch-none"
+      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none"
       onContextMenu={(e) => e.preventDefault()}
     >
       <div className="absolute top-[-5%] left-[-5%] w-[30%] h-[30%] bg-primary/10 rounded-full blur-3xl -z-10" />
@@ -218,7 +218,7 @@ export default function GameContainer() {
       </div>
 
       {gameState === 'START' && (
-        <div className="flex flex-col items-center justify-center flex-1 w-full space-y-4 sm:space-y-8 animate-in fade-in zoom-in duration-500 overflow-hidden">
+        <div className="flex flex-col landscape:flex-row items-center justify-center flex-1 w-full gap-4 sm:gap-8 landscape:gap-12 animate-in fade-in zoom-in duration-500 overflow-hidden">
           <div className="relative inline-block text-center scale-[0.8] sm:scale-100 transition-transform">
              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-[1.5rem] sm:rounded-[2rem] blur-xl opacity-20"></div>
              <div className="relative bg-white/80 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-white/50">
@@ -259,7 +259,7 @@ export default function GameContainer() {
       {gameState === 'PLAYING' && level && (
         <div className={`w-full h-full flex flex-col items-center justify-between py-2 sm:py-4 overflow-hidden ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
           {/* HUD Area */}
-          <div className="w-full flex justify-between items-center px-1 shrink-0 pt-10 sm:pt-0 max-w-md">
+          <div className="w-full flex justify-between items-center px-1 shrink-0 pt-10 sm:pt-0 max-w-xl mx-auto">
              <div className="bg-white/80 backdrop-blur px-2.5 py-1 rounded-full shadow-lg flex items-center gap-2 border border-primary/10">
                 <Trophy className="w-3.5 h-3.5 text-secondary" />
                 <span className="text-base font-black text-foreground tabular-nums">{score}</span>
@@ -274,58 +274,60 @@ export default function GameContainer() {
              </div>
           </div>
 
-          {/* Target Match Area */}
-          <div className="flex-1 flex flex-col items-center justify-center space-y-2 sm:space-y-4 min-h-0 py-2 w-full">
-            <div className="text-center shrink-0">
-              <h2 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{t(lang, 'matchThis')}</h2>
+          <div className="flex-1 w-full flex flex-col landscape:flex-row items-center justify-center gap-2 sm:gap-6 landscape:gap-12 min-h-0 py-2">
+            {/* Target Match Area */}
+            <div className="flex flex-col items-center justify-center space-y-1 sm:space-y-4 min-h-0 landscape:flex-1">
+              <div className="text-center shrink-0">
+                <h2 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{t(lang, 'matchThis')}</h2>
+              </div>
+              
+              <div className="relative flex items-center justify-center min-h-0 overflow-hidden py-2">
+                <div className="absolute -inset-4 bg-white/40 blur-2xl rounded-full" />
+                <div 
+                  className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
+                  style={{ backgroundColor: level.target.hex }}
+                />
+                {feedback === 'CORRECT' && (
+                  <div className="absolute -top-1 -right-1 bg-green-500 text-white p-1 rounded-full shadow-lg z-20 animate-bounce">
+                    <Zap className="w-4 h-4 fill-current" />
+                  </div>
+                )}
+              </div>
+              
+              <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
             </div>
-            
-            <div className="relative flex-1 flex items-center justify-center min-h-0 max-h-[140px] sm:max-h-none overflow-hidden">
-              <div className="absolute -inset-4 bg-white/40 blur-2xl rounded-full" />
-              <div 
-                className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
-                style={{ backgroundColor: level.target.hex }}
-              />
-              {feedback === 'CORRECT' && (
-                <div className="absolute -top-1 -right-1 bg-green-500 text-white p-1 rounded-full shadow-lg z-20 animate-bounce">
-                  <Zap className="w-4 h-4 fill-current" />
-                </div>
-              )}
-            </div>
-            
-            <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
-          </div>
 
-          {/* Grid Area - Now constrained with max-width for proportionality */}
-          <div className="w-full max-w-[320px] sm:max-w-[440px] px-2 sm:px-4 pb-4 sm:pb-8 shrink-0">
-            <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-1.5 sm:gap-3`}>
-              {level.choices.map((choice, i) => (
-                <button
-                  key={`${choice.name}-${i}`}
-                  onClick={() => handleChoice(choice)}
-                  className="aspect-square rounded-lg sm:rounded-xl shadow-[0_2px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-0.5 active:shadow-none relative overflow-hidden border-2 sm:border-4 border-white/80"
-                  style={{ backgroundColor: choice.hex }}
-                >
-                  <div className="absolute inset-0 bg-white opacity-0 active:opacity-20 transition-opacity" />
-                </button>
-              ))}
+            {/* Grid Area */}
+            <div className="w-full max-w-[320px] sm:max-w-[440px] landscape:max-w-[400px] px-2 sm:px-4 pb-2 sm:pb-8 shrink-0 flex items-center justify-center">
+              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-1.5 sm:gap-3 w-full`}>
+                {level.choices.map((choice, i) => (
+                  <button
+                    key={`${choice.name}-${i}`}
+                    onClick={() => handleChoice(choice)}
+                    className="aspect-square rounded-lg sm:rounded-xl shadow-[0_2px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-0.5 active:shadow-none relative overflow-hidden border-2 sm:border-4 border-white/80"
+                    style={{ backgroundColor: choice.hex }}
+                  >
+                    <div className="absolute inset-0 bg-white opacity-0 active:opacity-20 transition-opacity" />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {gameState === 'GAMEOVER' && (
-        <div className="flex flex-col items-center justify-center h-full w-full space-y-3 sm:space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden pt-12 sm:pt-0 max-w-md">
-          <div className="bg-white p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full text-center relative overflow-hidden shrink-0">
+        <div className="flex flex-col landscape:flex-row items-center justify-center h-full w-full gap-4 sm:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden pt-12 sm:pt-0 max-w-4xl mx-auto">
+          <div className="bg-white p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full max-w-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
             <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-primary/5 rounded-full -mr-8 -mt-8 sm:-mr-12 sm:-mt-12" />
             <h2 className="text-sm sm:text-2xl font-black text-foreground mb-1 sm:mb-4 uppercase tracking-tight">{t(lang, 'blitzOver')}</h2>
             <div className="text-4xl sm:text-7xl font-black text-primary mb-1 tracking-tighter tabular-nums leading-none">{score}</div>
             <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">{t(lang, 'finalScore')}</p>
           </div>
 
-          <div className="w-full space-y-3 sm:space-y-4 flex flex-col flex-1 min-h-0 justify-between overflow-hidden">
+          <div className="w-full max-w-sm space-y-3 sm:space-y-4 flex flex-col flex-1 min-h-0 justify-between overflow-hidden landscape:flex-1">
             {enableFacts && fact && (
-              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-secondary/20 relative w-full shadow-sm overflow-y-auto no-scrollbar flex-1 min-h-[60px] max-h-[25dvh]">
+              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-secondary/20 relative w-full shadow-sm overflow-y-auto no-scrollbar flex-1 min-h-[60px] max-h-[30dvh] landscape:max-h-[50dvh]">
                 <div className="absolute top-1.5 left-3 bg-secondary text-white px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest flex items-center gap-1 shadow-md z-10">
                   <Info className="w-2.5 h-2.5" />
                   {t(lang, 'colorFact')}
@@ -337,7 +339,7 @@ export default function GameContainer() {
             )}
 
             {enableFacts && loadingFact && (
-              <div className="animate-pulse flex flex-col items-center space-y-2 w-full py-2 flex-1">
+              <div className="animate-pulse flex flex-col items-center justify-center space-y-2 w-full py-2 flex-1">
                 <div className="h-1.5 bg-muted-foreground/20 rounded-full w-3/4" />
                 <div className="h-1.5 bg-muted-foreground/20 rounded-full w-1/2" />
               </div>
