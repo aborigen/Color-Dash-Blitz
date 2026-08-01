@@ -78,8 +78,10 @@ export default function GameContainer() {
         
         // Signal platform readiness
         if (sdkInstance.features?.LoadingAPI?.ready) {
+          console.log('Yandex SDK: Signaling readiness via LoadingAPI.ready()');
           sdkInstance.features.LoadingAPI.ready();
         } else if (sdkInstance.features?.LoadingProgress?.ready) {
+          console.log('Yandex SDK: Signaling readiness via LoadingProgress.ready()');
           sdkInstance.features.LoadingProgress.ready();
         }
       }
@@ -186,7 +188,11 @@ export default function GameContainer() {
   }, [level, generateLevel, score, playSound]);
 
   const handleShowLeaderboard = useCallback(async () => {
-    if (!sdk) return;
+    if (!sdk) {
+      console.warn('Game: Cannot show leaderboard, SDK not initialized.');
+      return;
+    }
+    console.log('Yandex SDK: Requesting leaderboard display/data...');
     try {
       // Modern access to leaderboards
       const lb = typeof (sdk as any).leaderboards === 'function' 
@@ -194,12 +200,12 @@ export default function GameContainer() {
         : (sdk as any).leaderboards;
       
       if (lb && lb.getEntries) {
-        // Technically this triggers the native overlay if configured or just fetches data
-        await lb.getEntries('leaders', { includeUser: true });
-        console.log('Leaderboard entries fetched for ID: leaders');
+        console.log('Yandex SDK: Fetching leaderboard entries for ID: leaders');
+        const entries = await lb.getEntries('leaders', { includeUser: true });
+        console.log('Yandex SDK: Leaderboard entries fetched:', entries);
       }
     } catch (err) {
-      console.warn('Could not access leaderboards', err);
+      console.error('Yandex SDK: Could not access leaderboards', err);
     }
   }, [sdk]);
 
