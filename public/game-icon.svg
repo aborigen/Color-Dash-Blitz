@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main Gradient Background -->
+  <rect width="512" height="512" rx="128" fill="url(#icon_gradient)" />
+  
+  <!-- Background Decorative "Color Blurs" -->
+  <circle cx="100" cy="100" r="60" fill="#FFD700" fill-opacity="0.3" />
+  <circle cx="412" cy="412" r="80" fill="#00FFFF" fill-opacity="0.2" />
+  <circle cx="412" cy="100" r="50" fill="#00FF00" fill-opacity="0.2" />
+  <circle cx="100" cy="412" r="70" fill="#FF00FF" fill-opacity="0.2" />
+  
+  <!-- Stylized Lightning Bolt (The Blitz) -->
+  <path d="M280 60L120 280H240L232 452L392 232H272L280 60Z" fill="white" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Subtle Inner Glow -->
+  <path d="M280 60L120 280H240L232 452L392 232H272L280 60Z" fill="white" fill-opacity="0.2" filter="url(#glow)" />
+
+  <defs>
+    <linearGradient id="icon_gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF4B4B" />
+      <stop offset="1" stop-color="#D81B60" />
+    </linearGradient>
+    
+    <filter id="glow" x="0" y="0" width="512" height="512" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+</svg>

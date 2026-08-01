@@ -12,6 +12,7 @@ Use these localized texts and asset descriptions when publishing **Color Dash Bl
 - **Main Element**: A bold, white "Zap" (lightning bolt) centered.
 - **Background**: A vibrant gradient from Primary Red (`#FF4B4B`) to Secondary Pink (`#D81B60`).
 - **Accents**: Subtle floating neon geometric shapes to represent "Colors".
+- **Source File**: Available at `public/game-icon.svg` for easy export or use in manifests.
 
 ### AI Generation Prompt (for Imagen/Midjourney)
 > "A high-quality, vibrant mobile game icon for 'Color Dash Blitz'. Centered is a thick, bold white lightning bolt. The background is a sleek, professional gradient of deep red to hot pink. Scattered around the bolt are semi-transparent neon colored circles and squares in cyan, gold, and lime green. Modern flat design, professional arcade aesthetic, high contrast, 512x512 resolution."
