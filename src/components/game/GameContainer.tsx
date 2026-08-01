@@ -69,6 +69,7 @@ export default function GameContainer() {
         const config = await fetchRemoteConfig(sdkInstance);
         setRemoteConfig(config);
         
+        // Signal platform readiness
         if (sdkInstance.features?.LoadingAPI?.ready) {
           sdkInstance.features.LoadingAPI.ready();
         } else if (sdkInstance.features?.LoadingProgress?.ready) {
@@ -124,10 +125,12 @@ export default function GameContainer() {
       }, 500);
     }
 
+    // Interstitial ad logic
     if (Math.random() > 0.6) {
       await showFullscreenAd(sdk);
     }
     
+    // Submit score to 'leaders' leaderboard
     if (finalScore > 0) {
       submitScoreToLeaderboard(sdk, 'leaders', finalScore);
     }
@@ -181,10 +184,10 @@ export default function GameContainer() {
     if (!sdk) return;
     try {
       const lb = await sdk.getLeaderboards();
-      console.log('Leaderboard access requested');
+      console.log('Leaderboard access requested for technical ID: leaders');
       // Technical note: In a static build for Yandex, this is where 
       // you would trigger the native leaderboard UI if the SDK provides a shortcut
-      // or open a custom modal with fetched leaderboard data.
+      // or open a custom modal with fetched leaderboard data from 'leaders'.
     } catch (err) {
       console.warn('Could not access leaderboards', err);
     }
@@ -334,7 +337,7 @@ export default function GameContainer() {
 
       {gameState === 'GAMEOVER' && (
         <div className="flex flex-col landscape:flex-row items-center justify-center h-full w-full gap-4 sm:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden pt-12 sm:pt-0 max-w-4xl mx-auto">
-          <div className="bg-white p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full max-w-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
+          <div className="bg-white p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full max-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
             <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-primary/5 rounded-full -mr-8 -mt-8 sm:-mr-12 sm:-mt-12" />
             <h2 className="text-sm sm:text-2xl font-black text-foreground mb-1 sm:mb-4 uppercase tracking-tight">{t(lang, 'blitzOver')}</h2>
             <div className="text-4xl sm:text-7xl font-black text-primary mb-1 tracking-tighter tabular-nums leading-none">{score}</div>
