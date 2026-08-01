@@ -3,8 +3,14 @@
     {
       "id": "game-cover",
       "description": "Main cover image for Color Dash Blitz",
-      "imageUrl": "https://picsum.photos/seed/colorblitz/800/600",
+      "imageUrl": "./game-cover.svg",
       "imageHint": "neon blitz"
+    },
+    {
+      "id": "game-icon",
+      "description": "Square icon for store listings",
+      "imageUrl": "./game-icon.svg",
+      "imageHint": "lightning bolt"
     }
   ]
 }
