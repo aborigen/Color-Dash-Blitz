@@ -38,16 +38,26 @@ A lightweight, typed translation system supporting English (`en`) and Russian (`
 - **Dynamic Helper**: The `tColor` function ensures that color names shown in the UI are always in the user's preferred language.
 
 ## 🔌 4. Yandex Games SDK Bridge (`src/lib/yandex-sdk.ts`)
-Handles communication between the game and the Yandex Games platform.
+The integration with the Yandex Games platform follows a robust pattern to ensure compatibility and stability:
 
-- **Initialization**: Robustly checks for the global `YaGames` object with a retry mechanism.
-- **Ads**: Manages full-screen interstitials using `showFullscreenAdv`.
-- **Remote Config**: Fetches balance variables (like starting timer values) from the cloud.
-- **Leaderboards**: Submits scores to the technical ID `leaders`.
+### 1. Script Injection
+The SDK is loaded via a script tag in `src/app/layout.tsx`. Because it loads asynchronously, we cannot rely on it being available immediately.
+
+### 2. The Bridge Logic (`src/lib/yandex-sdk.ts`)
+- **Retry Mechanism**: The `initYandexSDK` function uses a recursive retry strategy to check for `window.YaGames`. This prevents initialization failures if the script takes longer than the React mount cycle to load.
+- **Initialization**: Once found, `YaGames.init()` is called, and the resulting SDK instance is returned to the `GameContainer`.
+- **Typed Wrapper**: The bridge provides typed methods for `showFullscreenAd`, `submitScoreToLeaderboard`, and `fetchRemoteConfig`.
+
+### 3. Feature Implementations
+- **Ads**: `showFullscreenAd` is wrapped in a Promise to allow the game to pause logic while the interstitial is active.
+- **Remote Config**: Fetches balance variables from the Yandex Console. Used for `starting_timer` and `enable_facts` toggles.
+- **Leaderboards**: Submits high scores to the technical ID `leaders`.
+- **Loading Progress**: Calls `sdk.features.LoadingProgress.ready()` once the app and remote configs are ready, which is a requirement for Yandex publication.
+- **Environment Detection**: Detects `sdk.environment.i18n.lang` to automatically set the game's language to Russian or English.
 
 ## 🤖 5. AI & Static Logic
 - **Genkit AI Flow (`src/ai/flows/ai-created-color-fact-flow.ts`)**: Used during development to design color facts.
-- **Static Facts (`src/lib/facts.ts`)**: For production builds (which are 100% static), the app relies on this library of pre-compiled facts to ensure zero runtime server dependency. This is critical for hosting on static-only platforms like Yandex Games.
+- **Static Facts (`src/lib/facts.ts`)**: For production builds, the app relies on this library of pre-compiled facts to ensure zero runtime server dependency, which is critical for static-only platforms like Yandex Games.
 
 ## 📱 6. UI & Styling (`src/app/globals.css`)
 - **Dynamic Viewports**: Uses `dvh` units to ensure the game occupies the exact visible space on mobile browsers.
