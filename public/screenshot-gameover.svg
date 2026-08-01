@@ -1,0 +1,19 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" fill="#FDF2F2"/>
+  <circle cx="640" cy="360" r="400" fill="#D81B60" fill-opacity="0.03" filter="blur(120px)"/>
+
+  <rect x="440" y="80" width="400" height="280" rx="60" fill="white" stroke="#FF4B4B" stroke-width="4"/>
+  <text x="640" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="32" fill="#1A0A0A">BLITZ OVER!</text>
+  <text x="640" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="120" fill="#FF4B4B">42</text>
+  <text x="640" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="18" fill="#666" letter-spacing="0.2em">FINAL SCORE</text>
+
+  <rect x="240" y="420" width="800" height="160" rx="40" fill="white" fill-opacity="0.8" stroke="#D81B60" stroke-width="2" stroke-dasharray="8 8"/>
+  <rect x="260" y="405" width="150" height="30" rx="15" fill="#D81B60"/>
+  <text x="335" y="425" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="14" fill="white" letter-spacing="0.1em">COLOR FACT</text>
+  <text x="640" y="510" text-anchor="middle" font-family="Arial, sans-serif" font-weight="600" font-size="28" fill="#333" font-style="italic">"Blue is the most popular favorite color worldwide."</text>
+
+  <g transform="translate(540, 620)">
+     <rect width="200" height="60" rx="20" fill="#FF4B4B"/>
+     <text x="100" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="24" fill="white">PLAY AGAIN</text>
+  </g>
+</svg>
