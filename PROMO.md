@@ -14,13 +14,10 @@ Use these localized texts and asset descriptions when publishing **Color Dash Bl
 - **Background**: A vibrant gradient from Primary Red (`#FF4B4B`) to Secondary Pink (`#D81B60`).
 
 ### Cover Image Specification (800x470)
-- **File**: `public/game-cover.svg`
-- **Theme**: Action-packed, cinematic explosion of color.
-- **Visuals**: A large glowing lightning bolt shattering the dark background with neon geometric shards.
+- **English**: `public/game-cover.svg`
+- **Russian**: `public/game-cover-ru.svg`
+- **Theme**: Action-packed, cinematic explosion of color with localized game title.
 - **Vibe**: High-stakes, fast-paced, and professional.
-
-### Cover Image AI Generation Prompt (Imagen/Midjourney)
-> "A cinematic widescreen game cover for 'Color Dash Blitz'. A dynamic explosion of colorful neon geometric blocks. In the center, a powerful white glowing lightning bolt streaks through the scene, causing a burst of light. The background is a dark professional purple. High energy, vibrant reds, pinks and cyans, professional arcade game art style, 800x470 resolution, high resolution digital painting."
 
 ---
 

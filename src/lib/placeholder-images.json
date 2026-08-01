@@ -1,10 +1,16 @@
 {
   "placeholderImages": [
     {
-      "id": "game-cover",
-      "description": "Main cover image for Color Dash Blitz",
+      "id": "game-cover-en",
+      "description": "Main cover image for Color Dash Blitz (English)",
       "imageUrl": "./game-cover.svg",
-      "imageHint": "neon blitz"
+      "imageHint": "neon blitz en"
+    },
+    {
+      "id": "game-cover-ru",
+      "description": "Main cover image for Color Dash Blitz (Russian)",
+      "imageUrl": "./game-cover-ru.svg",
+      "imageHint": "neon blitz ru"
     },
     {
       "id": "game-icon",

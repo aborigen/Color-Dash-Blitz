@@ -27,6 +27,6 @@
   <path d="M440 40L280 250H400L390 430L550 220H430L440 40Z" fill="url(#bolt_grad)" fill-opacity="0.8"/>
   
   <!-- Title Text -->
-  <text x="400" y="240" font-family="Arial, sans-serif" font-weight="900" font-size="64" fill="white" text-anchor="middle" filter="url(#glow)" style="text-transform: uppercase; letter-spacing: 4px;">COLOR DASH BLITZ</text>
-  <text x="400" y="285" font-family="Arial, sans-serif" font-weight="700" font-size="18" fill="#00FFFF" text-anchor="middle" style="text-transform: uppercase; letter-spacing: 8px; opacity: 0.8;">THE ULTIMATE MATCHER</text>
+  <text x="400" y="240" font-family="Arial, sans-serif" font-weight="900" font-size="64" fill="white" text-anchor="middle" filter="url(#glow)" style="text-transform: uppercase; letter-spacing: 4px;">ЦВЕТНОЙ БЛИЦ</text>
+  <text x="400" y="285" font-family="Arial, sans-serif" font-weight="700" font-size="18" fill="#00FFFF" text-anchor="middle" style="text-transform: uppercase; letter-spacing: 8px; opacity: 0.8;">УЛЬТИМАТИВНЫЙ МАТЧЕР</text>
 </svg>
