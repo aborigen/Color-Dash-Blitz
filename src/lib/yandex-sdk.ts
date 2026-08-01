@@ -27,6 +27,7 @@ export interface YandexSDK {
   getLeaderboards: () => Promise<{
     setLeaderboardScore: (name: string, score: number) => Promise<void>;
     getLeaderboardDescription: (name: string) => Promise<any>;
+    getEntries: (name: string, options?: any) => Promise<any>;
   }>;
   getRemoteConfig: (options?: { clientParams?: Record<string, string> }) => Promise<Record<string, any>>;
   environment: {

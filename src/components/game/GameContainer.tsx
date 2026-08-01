@@ -69,7 +69,6 @@ export default function GameContainer() {
         const config = await fetchRemoteConfig(sdkInstance);
         setRemoteConfig(config);
         
-        // Signal that the game is loaded and ready
         if (sdkInstance.features?.LoadingAPI?.ready) {
           sdkInstance.features.LoadingAPI.ready();
         } else if (sdkInstance.features?.LoadingProgress?.ready) {
@@ -178,6 +177,19 @@ export default function GameContainer() {
     }
   }, [level, generateLevel, score, playSound]);
 
+  const handleShowLeaderboard = useCallback(async () => {
+    if (!sdk) return;
+    try {
+      const lb = await sdk.getLeaderboards();
+      console.log('Leaderboard access requested');
+      // Technical note: In a static build for Yandex, this is where 
+      // you would trigger the native leaderboard UI if the SDK provides a shortcut
+      // or open a custom modal with fetched leaderboard data.
+    } catch (err) {
+      console.warn('Could not access leaderboards', err);
+    }
+  }, [sdk]);
+
   const toggleMute = () => setIsMuted(prev => !prev);
   const toggleLanguage = () => setLang(prev => prev === 'en' ? 'ru' : 'en');
 
@@ -246,11 +258,15 @@ export default function GameContainer() {
             </Button>
 
             <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              <div className="bg-white/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/50 flex flex-col items-center justify-center text-center">
+              <Button 
+                variant="ghost"
+                onClick={handleShowLeaderboard}
+                className="h-auto py-2 sm:py-3 px-0 bg-white/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/50 flex flex-col items-center justify-center text-center hover:bg-white/80 active:translate-y-0.5 transition-all shadow-sm"
+              >
                 <Trophy className="w-4 h-4 mb-1 text-secondary" />
                 <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'leaderboards')}</span>
-              </div>
-              <div className="bg-white/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/50 flex flex-col items-center justify-center text-center">
+              </Button>
+              <div className="bg-white/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/50 flex flex-col items-center justify-center text-center shadow-sm">
                 <Zap className="w-4 h-4 mb-1 text-primary" />
                 <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'quickReflex')}</span>
               </div>
@@ -261,7 +277,6 @@ export default function GameContainer() {
 
       {gameState === 'PLAYING' && level && (
         <div className={`w-full h-full flex flex-col items-center justify-between py-2 sm:py-4 overflow-hidden ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
-          {/* HUD Area */}
           <div className="w-full flex justify-between items-center px-1 shrink-0 pt-10 sm:pt-0 max-w-xl mx-auto">
              <div className="bg-white/80 backdrop-blur px-2.5 py-1 rounded-full shadow-lg flex items-center gap-2 border border-primary/10">
                 <Trophy className="w-3.5 h-3.5 text-secondary" />
@@ -278,7 +293,6 @@ export default function GameContainer() {
           </div>
 
           <div className="flex-1 w-full flex flex-col landscape:flex-row items-center justify-center gap-2 sm:gap-6 landscape:gap-12 min-h-0 py-2">
-            {/* Target Match Area */}
             <div className="flex flex-col items-center justify-center space-y-1 sm:space-y-4 min-h-0 landscape:flex-1">
               <div className="text-center shrink-0">
                 <h2 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{t(lang, 'matchThis')}</h2>
@@ -300,7 +314,6 @@ export default function GameContainer() {
               <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
             </div>
 
-            {/* Grid Area */}
             <div className="w-full max-w-[320px] sm:max-w-[440px] landscape:max-w-[400px] px-2 sm:px-4 pb-2 sm:pb-8 shrink-0 flex items-center justify-center">
               <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-1.5 sm:gap-3 w-full`}>
                 {level.choices.map((choice, i) => (
@@ -328,7 +341,7 @@ export default function GameContainer() {
             <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">{t(lang, 'finalScore')}</p>
           </div>
 
-          <div className="w-full max-w-sm space-y-3 sm:space-y-4 flex flex-col flex-1 min-h-0 justify-between overflow-hidden landscape:flex-1">
+          <div className="w-full max-sm space-y-3 sm:space-y-4 flex flex-col flex-1 min-h-0 justify-between overflow-hidden landscape:flex-1">
             {enableFacts && fact && (
               <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-secondary/20 relative w-full shadow-sm overflow-y-auto no-scrollbar flex-1 min-h-[60px] max-h-[30dvh] landscape:max-h-[50dvh]">
                 <div className="absolute top-1.5 left-3 bg-secondary text-white px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest flex items-center gap-1 shadow-md z-10">
