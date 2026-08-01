@@ -16,8 +16,12 @@ Use these localized texts and asset descriptions when publishing **Color Dash Bl
 ### Cover Image Specification (800x470)
 - **English**: `public/game-cover.svg`
 - **Russian**: `public/game-cover-ru.svg`
-- **Theme**: Action-packed, cinematic explosion of color with localized game title.
 - **Vibe**: High-stakes, fast-paced, and professional.
+
+### Screenshots (1280x720 - 16:9 Landscape)
+- **Screenshot 1**: High-energy Menu with "PLAY NOW" button.
+- **Screenshot 2**: Active gameplay showing the matching grid and target color.
+- **Screenshot 3**: Game over screen showing high score and an AI-powered color fact.
 
 ---
 

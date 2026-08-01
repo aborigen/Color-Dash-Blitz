@@ -17,6 +17,18 @@
       "description": "Square icon for store listings",
       "imageUrl": "./game-icon.svg",
       "imageHint": "lightning bolt"
+    },
+    {
+      "id": "screenshot-gameplay",
+      "description": "16:9 Landscape Gameplay Screenshot",
+      "imageUrl": "./screenshot-gameplay.svg",
+      "imageHint": "color grid gameplay"
+    },
+    {
+      "id": "screenshot-gameover",
+      "description": "16:9 Landscape Game Over Screenshot",
+      "imageUrl": "./screenshot-gameover.svg",
+      "imageHint": "game results screen"
     }
   ]
 }
