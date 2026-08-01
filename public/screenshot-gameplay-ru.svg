@@ -1,0 +1,29 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" fill="#FFFBFB"/>
+  <circle cx="200" cy="100" r="300" fill="#FF4B4B" fill-opacity="0.1" filter="blur(100px)"/>
+  <circle cx="1080" cy="620" r="350" fill="#D81B60" fill-opacity="0.1" filter="blur(120px)"/>
+  
+  <rect x="40" y="40" width="1200" height="640" rx="60" stroke="white" stroke-opacity="0.5" stroke-width="12"/>
+  
+  <text x="640" y="180" text-anchor="middle" font-family="Poppins, sans-serif" font-size="72" font-weight="900" fill="#1A0F0E" style="text-transform: uppercase; letter-spacing: -0.02em; font-style: italic;">НАЙДИ ЦВЕТ!</text>
+  <text x="640" y="240" text-anchor="middle" font-family="Poppins, sans-serif" font-size="24" font-weight="700" fill="#665554" style="text-transform: uppercase; letter-spacing: 0.3em;">БУДЬ БЫСТРЕЕ, ВРЕМЯ ИДЕТ</text>
+  
+  <!-- Gameplay Mockup -->
+  <rect x="400" y="300" width="160" height="160" rx="40" fill="#FF00FF" stroke="white" stroke-width="8" filter="drop-shadow(0 10px 20px rgba(0,0,0,0.2))"/>
+  
+  <g transform="translate(620, 300)">
+    <rect x="0" y="0" width="80" height="80" rx="16" fill="#F3F0F0"/>
+    <rect x="100" y="0" width="80" height="80" rx="16" fill="#FF00FF" stroke="white" stroke-width="4"/>
+    <rect x="200" y="0" width="80" height="80" rx="16" fill="#F3F0F0"/>
+    <rect x="0" y="100" width="80" height="80" rx="16" fill="#F3F0F0"/>
+    <rect x="100" y="100" width="80" height="80" rx="16" fill="#F3F0F0"/>
+    <rect x="200" y="100" width="80" height="80" rx="16" fill="#F3F0F0"/>
+  </g>
+  
+  <!-- Footer Branding -->
+  <g transform="translate(540, 600)">
+    <rect width="40" height="40" rx="10" fill="#FF4B4B"/>
+    <path d="M22 6L12 22H20L19 34L29 18H21L22 6Z" fill="white"/>
+    <text x="55" y="30" font-family="Poppins, sans-serif" font-size="28" font-weight="900" fill="#1A0F0E" style="text-transform: uppercase; letter-spacing: -0.05em;">ЦВЕТНОЙ <tspan fill="#D81B60">БЛИЦ</tspan></text>
+  </g>
+</svg>

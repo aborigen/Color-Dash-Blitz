@@ -19,9 +19,12 @@ Use these localized texts and asset descriptions when publishing **Color Dash Bl
 - **Vibe**: High-stakes, fast-paced, and professional.
 
 ### Screenshots (1280x720 - 16:9 Landscape)
-- **Screenshot 1**: High-energy Menu with "PLAY NOW" button.
-- **Screenshot 2**: Active gameplay showing the matching grid and target color.
-- **Screenshot 3**: Game over screen showing high score and an AI-powered color fact.
+- **English Assets**:
+    - `public/screenshot-gameplay.svg`: High-energy grid match.
+    - `public/screenshot-gameover.svg`: Score screen with AI facts.
+- **Russian Assets**:
+    - `public/screenshot-gameplay-ru.svg`: Локализованный геймплей.
+    - `public/screenshot-gameover-ru.svg`: Экран завершения игры с фактами.
 
 ---
 

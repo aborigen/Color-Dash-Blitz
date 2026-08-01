@@ -29,6 +29,18 @@
       "description": "16:9 Landscape Game Over Screenshot",
       "imageUrl": "./screenshot-gameover.svg",
       "imageHint": "game results screen"
+    },
+    {
+      "id": "screenshot-gameplay-ru",
+      "description": "16:9 Landscape Gameplay Screenshot (Russian)",
+      "imageUrl": "./screenshot-gameplay-ru.svg",
+      "imageHint": "color grid gameplay ru"
+    },
+    {
+      "id": "screenshot-gameover-ru",
+      "description": "16:9 Landscape Game Over Screenshot (Russian)",
+      "imageUrl": "./screenshot-gameover-ru.svg",
+      "imageHint": "game results screen ru"
     }
   ]
 }
