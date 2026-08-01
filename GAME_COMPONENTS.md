@@ -45,12 +45,9 @@ Handles communication between the game and the Yandex Games platform.
 - **Remote Config**: Fetches balance variables (like starting timer values) from the cloud.
 - **Leaderboards**: Submits scores to the technical ID `leaders`.
 
-## 🤖 5. Genkit AI Flow (`src/ai/flows/ai-created-color-fact-flow.ts`)
-Integrates **Google Gemini** to provide educational and fun color facts.
-
-- **Input**: Accepts an optional `colorName` and `lang`.
-- **Flow**: Uses a structured Genkit prompt to generate concise, localized facts about color theory or specific hues.
-- **Fallback**: Includes a local `facts.ts` library to provide immediate facts if the AI service is unreachable.
+## 🤖 5. AI & Static Logic
+- **Genkit AI Flow (`src/ai/flows/ai-created-color-fact-flow.ts`)**: Used during development to design color facts.
+- **Static Facts (`src/lib/facts.ts`)**: For production builds (which are 100% static), the app relies on this library of pre-compiled facts to ensure zero runtime server dependency. This is critical for hosting on static-only platforms like Yandex Games.
 
 ## 📱 6. UI & Styling (`src/app/globals.css`)
 - **Dynamic Viewports**: Uses `dvh` units to ensure the game occupies the exact visible space on mobile browsers.
