@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "game-cover",
+      "description": "Main cover image for Color Dash Blitz",
+      "imageUrl": "https://picsum.photos/seed/colorblitz/800/600",
+      "imageHint": "neon blitz"
+    }
+  ]
 }
