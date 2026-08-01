@@ -52,7 +52,7 @@ The SDK is loaded via a script tag in `src/app/layout.tsx`. Because it loads asy
 - **Ads**: `showFullscreenAd` is wrapped in a Promise to allow the game to pause logic while the interstitial is active.
 - **Remote Config**: Fetches balance variables from the Yandex Console. Used for `starting_timer` and `enable_facts` toggles.
 - **Leaderboards**: Submits high scores to the technical ID `leaders`.
-- **Loading Progress**: Calls `sdk.features.LoadingProgress.ready()` once the app and remote configs are ready, which is a requirement for Yandex publication.
+- **Loading Progress**: Calls `sdk.features.LoadingAPI.ready()` once the app and remote configs are ready, which is a requirement for Yandex publication.
 - **Environment Detection**: Detects `sdk.environment.i18n.lang` to automatically set the game's language to Russian or English.
 
 ## 🤖 5. AI & Static Logic

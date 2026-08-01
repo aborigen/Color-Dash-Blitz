@@ -69,7 +69,10 @@ export default function GameContainer() {
         const config = await fetchRemoteConfig(sdkInstance);
         setRemoteConfig(config);
         
-        if (sdkInstance.features?.LoadingProgress?.ready) {
+        // Signal that the game is loaded and ready
+        if (sdkInstance.features?.LoadingAPI?.ready) {
+          sdkInstance.features.LoadingAPI.ready();
+        } else if (sdkInstance.features?.LoadingProgress?.ready) {
           sdkInstance.features.LoadingProgress.ready();
         }
       }

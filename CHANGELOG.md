@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.1] - 2024-05-25
+
+### Fixed
+- **SDK Lifecycle**: Updated the readiness signal to use `sdk.features.LoadingAPI.ready()` for better compatibility with the latest Yandex Games platform standards.
+
 ## [0.3.0] - 2024-05-24
 
 ### Added

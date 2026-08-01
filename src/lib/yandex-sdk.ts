@@ -17,7 +17,10 @@ export interface YandexSDK {
     }) => void;
   };
   features: {
-    LoadingProgress: {
+    LoadingAPI?: {
+      ready: () => void;
+    };
+    LoadingProgress?: {
       ready: () => void;
     };
   };
