@@ -51,9 +51,10 @@ The SDK is loaded via a script tag in `src/app/layout.tsx`. Because it loads asy
 ### 3. Feature Implementations
 - **Ads**: `showFullscreenAd` is wrapped in a Promise to allow the game to pause logic while the interstitial is active.
 - **Remote Config**: Fetches balance variables from the Yandex Console. Used for `starting_timer` and `enable_facts` toggles.
-- **Leaderboards**: Submits high scores to the technical ID `leaders`. All leaderboard-related operations use this consistent ID.
-- **Loading Progress**: Calls `sdk.features.LoadingAPI.ready()` once the app and remote configs are ready, which is a requirement for Yandex publication.
+- **Leaderboards**: Submits high scores to the technical ID `leaders`. Uses the modern `ysdk.leaderboards` API call, which is the current platform standard.
+- **Loading Progress**: Calls `sdk.features.LoadingAPI.ready()` once the app and remote configs are ready, ensuring the Yandex platform correctly tracks loading state.
 - **Environment Detection**: Detects `sdk.environment.i18n.lang` to automatically set the game's language to Russian or English.
+- **Personalization**: Uses `sdk.getPlayer()` to fetch the user's Yandex profile name for a customized greeting.
 
 ## 🤖 5. AI & Static Logic
 - **Genkit AI Flow (`src/ai/flows/ai-created-color-fact-flow.ts`)**: Used during development to design color facts.

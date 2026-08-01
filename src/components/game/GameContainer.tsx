@@ -188,8 +188,16 @@ export default function GameContainer() {
   const handleShowLeaderboard = useCallback(async () => {
     if (!sdk) return;
     try {
-      await sdk.getLeaderboards();
-      console.log('Leaderboard access requested for technical ID: leaders');
+      // Modern access to leaderboards
+      const lb = typeof (sdk as any).leaderboards === 'function' 
+        ? await (sdk as any).leaderboards() 
+        : (sdk as any).leaderboards;
+      
+      if (lb && lb.getEntries) {
+        // Technically this triggers the native overlay if configured or just fetches data
+        await lb.getEntries('leaders', { includeUser: true });
+        console.log('Leaderboard entries fetched for ID: leaders');
+      }
     } catch (err) {
       console.warn('Could not access leaderboards', err);
     }

@@ -30,11 +30,13 @@ export interface YandexSDK {
       ready: () => void;
     };
   };
-  getLeaderboards: () => Promise<{
+  // Modern API replacing getLeaderboards()
+  leaderboards: {
     setLeaderboardScore: (name: string, score: number) => Promise<void>;
     getLeaderboardDescription: (name: string) => Promise<any>;
     getEntries: (name: string, options?: any) => Promise<any>;
-  }>;
+  };
+  getLeaderboards: () => Promise<any>; // Kept for legacy compatibility if needed internally
   getRemoteConfig: (options?: { clientParams?: Record<string, string> }) => Promise<Record<string, any>>;
   getPlayer: (options?: { scopes?: boolean }) => Promise<Player>;
   environment: {
@@ -115,14 +117,23 @@ export async function showFullscreenAd(sdk: YandexSDK | null) {
 }
 
 /**
- * Safely submits a score to a specified leaderboard.
+ * Safely submits a score to a specified leaderboard using the modern leaderboards API.
  */
 export async function submitScoreToLeaderboard(sdk: YandexSDK | null, leaderboardName: string, score: number) {
   if (!sdk) return;
   try {
-    const lb = await sdk.getLeaderboards();
-    await lb.setLeaderboardScore(leaderboardName, score);
-    console.log(`Score ${score} submitted to leaderboard: ${leaderboardName}`);
+    // Note: Some SDK versions provide 'leaderboards' as an async function, others as an object.
+    // Based on the error "Please, use ysdk.leaderboards", we handle the modern initialization.
+    const lb = typeof (sdk as any).leaderboards === 'function' 
+      ? await (sdk as any).leaderboards() 
+      : (sdk as any).leaderboards;
+
+    if (lb && lb.setLeaderboardScore) {
+      await lb.setLeaderboardScore(leaderboardName, score);
+      console.log(`Score ${score} submitted to leaderboard: ${leaderboardName}`);
+    } else {
+      console.warn('Leaderboard API structure unexpected');
+    }
   } catch (err) {
     console.warn(`Leaderboard submission failed for '${leaderboardName}':`, err);
   }
