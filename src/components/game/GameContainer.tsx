@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages } from 'lucide-react';
-import { initYandexSDK, showFullscreenAd, submitScoreToLeaderboard, fetchRemoteConfig, YandexSDK, getLanguage } from '@/lib/yandex-sdk';
+import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, User } from 'lucide-react';
+import { initYandexSDK, showFullscreenAd, submitScoreToLeaderboard, fetchRemoteConfig, YandexSDK, getLanguage, getPlayerData } from '@/lib/yandex-sdk';
 import { t, tColor, Language } from '@/lib/i18n';
 import { getRandomFact } from '@/lib/facts';
 import { synth } from '@/lib/audio-synth';
@@ -57,6 +57,7 @@ export default function GameContainer() {
   const [remoteConfig, setRemoteConfig] = useState<Record<string, any>>({});
   const [isMuted, setIsMuted] = useState(false);
   const [lang, setLang] = useState<Language>('en');
+  const [userName, setUserName] = useState<string | null>(null);
 
   const enableFacts = remoteConfig.enable_facts !== false;
   const initialTimerValue = Number(remoteConfig.starting_timer) || 100;
@@ -68,6 +69,12 @@ export default function GameContainer() {
         setLang(getLanguage(sdkInstance));
         const config = await fetchRemoteConfig(sdkInstance);
         setRemoteConfig(config);
+        
+        // Fetch player data for personalization
+        const playerData = await getPlayerData(sdkInstance);
+        if (playerData && playerData.name && playerData.name !== 'Guest') {
+          setUserName(playerData.name);
+        }
         
         // Signal platform readiness
         if (sdkInstance.features?.LoadingAPI?.ready) {
@@ -125,12 +132,10 @@ export default function GameContainer() {
       }, 500);
     }
 
-    // Interstitial ad logic
     if (Math.random() > 0.6) {
       await showFullscreenAd(sdk);
     }
     
-    // Submit score to 'leaders' leaderboard
     if (finalScore > 0) {
       submitScoreToLeaderboard(sdk, 'leaders', finalScore);
     }
@@ -183,11 +188,8 @@ export default function GameContainer() {
   const handleShowLeaderboard = useCallback(async () => {
     if (!sdk) return;
     try {
-      const lb = await sdk.getLeaderboards();
+      await sdk.getLeaderboards();
       console.log('Leaderboard access requested for technical ID: leaders');
-      // Technical note: In a static build for Yandex, this is where 
-      // you would trigger the native leaderboard UI if the SDK provides a shortcut
-      // or open a custom modal with fetched leaderboard data from 'leaders'.
     } catch (err) {
       console.warn('Could not access leaderboards', err);
     }
@@ -212,7 +214,7 @@ export default function GameContainer() {
       <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-3xl -z-10" />
 
       {/* Global Controls */}
-      <div className="absolute top-4 left-4 z-20">
+      <div className="absolute top-4 left-4 z-20 flex gap-2">
         <Button 
           variant="ghost" 
           size="sm" 
@@ -240,6 +242,12 @@ export default function GameContainer() {
           <div className="relative inline-block text-center scale-[0.8] sm:scale-100 transition-transform">
              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-[1.5rem] sm:rounded-[2rem] blur-xl opacity-20"></div>
              <div className="relative bg-white/80 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-white/50">
+               {userName && (
+                 <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4 px-3 py-1 bg-secondary/10 rounded-full border border-secondary/20 w-fit mx-auto animate-in slide-in-from-top-4 duration-700">
+                    <User className="w-3 h-3 text-secondary" />
+                    <span className="text-[9px] font-black text-secondary uppercase tracking-wider">{t(lang, 'welcome')} {userName}</span>
+                 </div>
+               )}
                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-primary/10 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 animate-bounce">
                  <Zap className="w-6 h-6 sm:w-10 sm:h-10 text-primary fill-current" />
                </div>

@@ -1,4 +1,3 @@
-
 export type Language = 'en' | 'ru';
 
 export const translations = {
@@ -6,6 +5,7 @@ export const translations = {
     title: "Color Dash",
     titleSuffix: "Blitz",
     subtitle: "The Ultimate Matcher",
+    welcome: "Welcome back,",
     playNow: "PLAY NOW",
     startBlitzing: "START BLITZING",
     leaderboards: "LEADERBOARDS",
@@ -36,6 +36,7 @@ export const translations = {
     title: "Цветной",
     titleSuffix: "Блиц",
     subtitle: "Ультимативный Матчер",
+    welcome: "С возвращением,",
     playNow: "ИГРАТЬ",
     startBlitzing: "НАЧАТЬ БЛИЦ",
     leaderboards: "ЛИДЕРЫ",

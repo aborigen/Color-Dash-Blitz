@@ -1,6 +1,12 @@
 // Bridge for Yandex Games SDK
 // We use window.YaGames as defined by the script in layout.tsx
 
+export interface Player {
+  getName: () => string;
+  getPhoto: (size: 'small' | 'medium' | 'large') => string;
+  getUniqueID: () => string;
+}
+
 export interface YandexSDK {
   adv: {
     showFullscreenAdv: (callbacks: { 
@@ -30,6 +36,7 @@ export interface YandexSDK {
     getEntries: (name: string, options?: any) => Promise<any>;
   }>;
   getRemoteConfig: (options?: { clientParams?: Record<string, string> }) => Promise<Record<string, any>>;
+  getPlayer: (options?: { scopes?: boolean }) => Promise<Player>;
   environment: {
     i18n: {
       lang: string;
@@ -68,6 +75,23 @@ export async function initYandexSDK(): Promise<YandexSDK | null> {
 }
 
 /**
+ * Fetches the player profile if authorized.
+ */
+export async function getPlayerData(sdk: YandexSDK | null): Promise<{ name: string } | null> {
+  if (!sdk) return null;
+  try {
+    // Attempt silent initialization (scopes: false) to get basic data without popups
+    const player = await sdk.getPlayer({ scopes: false });
+    return {
+      name: player.getName(),
+    };
+  } catch (err) {
+    console.warn('Player initialization failed or declined:', err);
+    return null;
+  }
+}
+
+/**
  * Shows a full-screen advertisement.
  */
 export async function showFullscreenAd(sdk: YandexSDK | null) {
@@ -97,7 +121,6 @@ export async function submitScoreToLeaderboard(sdk: YandexSDK | null, leaderboar
   if (!sdk) return;
   try {
     const lb = await sdk.getLeaderboards();
-    // Yandex SDK handles its own auth check inside setLeaderboardScore
     await lb.setLeaderboardScore(leaderboardName, score);
     console.log(`Score ${score} submitted to leaderboard: ${leaderboardName}`);
   } catch (err) {
