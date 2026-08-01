@@ -16,7 +16,12 @@ export const COLOR_FACTS: Record<Language, string[]> = {
     "In ancient Rome, only the Emperor was allowed to wear a completely purple toga.",
     "There are over 10 million different colors that the human eye can distinguish.",
     "Silver is considered the most 'tech' color, often associated with innovation.",
-    "Gold symbolizes wealth and success in almost every culture across history."
+    "Gold symbolizes wealth and success in almost every culture across history.",
+    "Bees can see ultraviolet light, which is invisible to humans.",
+    "The color 'Vantablack' is the darkest man-made substance, absorbing 99.96% of light.",
+    "In some cultures, white is the color of mourning, not black.",
+    "The human eye is most sensitive to the color green.",
+    "Brown is actually just a dark, desaturated shade of orange."
   ],
   ru: [
     "Красный — первый цвет, который начинает различать ребенок после черного и белого.",
@@ -33,7 +38,12 @@ export const COLOR_FACTS: Record<Language, string[]> = {
     "В древнем Риме только императору разрешалось носить полностью пурпурную тогу.",
     "Человеческий глаз способен различать более 10 миллионов различных цветов.",
     "Серебряный считается самым 'технологичным' цветом, ассоциирующимся с инновациями.",
-    "Золотой символизирует богатство и успех почти во всех культурах мира."
+    "Золотой символизирует богатство и успех почти во всех культурах мира.",
+    "Пчелы видят ультрафиолетовый свет, который невидим для человека.",
+    "Цвет 'Vantablack' — это самое темное вещество, созданное человеком, оно поглощает 99,96% света.",
+    "В некоторых культурах белый — это цвет траура, а не черный.",
+    "Человеческий глаз наиболее чувствителен к зеленому цвету.",
+    "Коричневый цвет — это на самом деле просто темный, ненасыщенный оттенок оранжевого."
   ]
 };
 
