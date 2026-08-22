@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.3] - 2024-05-27
+
+### Fixed
+- **Leaderboard API**: Implemented a robust `getLBManager` helper in the SDK bridge to resolve `API structure unexpected` errors. The bridge now gracefully handles different SDK versions and property/method structures for the `leaderboards` module.
+
 ## [0.3.2] - 2024-05-26
 
 ### Improved

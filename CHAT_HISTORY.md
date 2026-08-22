@@ -17,6 +17,7 @@ This document tracks the iterative development of **Color Dash Blitz**, document
     - Integrated Full-screen Ads, Remote Configuration, and Global Leaderboards.
     - Switched to `ysdk.leaderboards` to resolve deprecation errors.
     - Implemented `LoadingAPI.ready()` to signal game readiness.
+    - **Fix**: Resolved `API structure unexpected` error for leaderboards by implementing a defensive detection helper (`getLBManager`).
 
 ### 3. Internationalization (i18n)
 - **Task**: Support English and Russian players.

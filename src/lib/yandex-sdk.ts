@@ -30,12 +30,7 @@ export interface YandexSDK {
       ready: () => void;
     };
   };
-  leaderboards: {
-    setLeaderboardScore: (name: string, score: number) => Promise<void>;
-    getLeaderboardDescription: (name: string) => Promise<any>;
-    getEntries: (name: string, options?: any) => Promise<any>;
-    getLeaderboardPlayerEntry: (name: string) => Promise<any>;
-  };
+  leaderboards: any; // Can be object or function depending on SDK version
   getLeaderboards: () => Promise<any>;
   getRemoteConfig: (options?: { clientParams?: Record<string, string> }) => Promise<Record<string, any>>;
   getPlayer: (options?: { scopes?: boolean }) => Promise<Player>;
@@ -44,6 +39,33 @@ export interface YandexSDK {
       lang: string;
     };
   };
+}
+
+/**
+ * Helper to safely get the leaderboard manager from the SDK.
+ * Handles deprecated vs modern property access.
+ */
+async function getLBManager(sdk: YandexSDK): Promise<any> {
+  try {
+    // 1. Check if 'leaderboards' is the manager object itself
+    if (sdk.leaderboards && typeof sdk.leaderboards.setLeaderboardScore === 'function') {
+      return sdk.leaderboards;
+    }
+    
+    // 2. Check if 'leaderboards' is a function (common in some v2 builds)
+    if (typeof sdk.leaderboards === 'function') {
+      return await (sdk.leaderboards as any)();
+    }
+    
+    // 3. Fallback to getLeaderboards() if nothing else works (last resort)
+    if (typeof sdk.getLeaderboards === 'function') {
+      console.log('Yandex SDK: Falling back to getLeaderboards()');
+      return await sdk.getLeaderboards();
+    }
+  } catch (err) {
+    console.error('Yandex SDK: [Leaderboard] Manager access failed:', err);
+  }
+  return null;
 }
 
 /**
@@ -137,9 +159,7 @@ export async function submitScoreToLeaderboard(sdk: YandexSDK | null, leaderboar
   console.log(`Yandex SDK: [Leaderboard] Incrementing score for "${leaderboardName}" by ${roundScore}...`);
   
   try {
-    const lb = typeof (sdk as any).leaderboards === 'function' 
-      ? await (sdk as any).leaderboards() 
-      : (sdk as any).leaderboards;
+    const lb = await getLBManager(sdk);
 
     if (lb && lb.setLeaderboardScore) {
       let currentTotal = 0;
@@ -172,9 +192,7 @@ export async function getLeaderboardEntries(sdk: YandexSDK | null, leaderboardNa
   }
   console.log(`Yandex SDK: [Leaderboard] Fetching top ${quantity} entries for "${leaderboardName}"...`);
   try {
-    const lb = typeof (sdk as any).leaderboards === 'function' 
-      ? await (sdk as any).leaderboards() 
-      : (sdk as any).leaderboards;
+    const lb = await getLBManager(sdk);
     
     if (lb && lb.getEntries) {
       const res = await lb.getEntries(leaderboardName, { 
