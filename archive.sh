@@ -1,39 +1,60 @@
 #!/bin/bash
 
-# Color Dash Blitz - Build & Archive Script
-# This script builds the project and creates a zip file for Yandex Games / Web publishing.
+# Color Dash Blitz - Professional Build & Archive Script
+# Optimized for Yandex Games and static web publishing.
 
 # Exit on any error
 set -e
 
-echo "--- 🛠 Starting Build Process ---"
+echo "------------------------------------------"
+echo "🚀 Starting Color Dash Blitz Build Process"
+echo "------------------------------------------"
+
+# 0. Early Environment Checks
+if ! command -v zip >/dev/null 2>&1; then
+  echo "❌ Error: 'zip' command not found. Please install zip and try again."
+  exit 1
+fi
+
+if [ ! -d "node_modules" ]; then
+  echo "⚠️  node_modules not found. Installing dependencies..."
+  npm install
+fi
 
 # 1. Clean previous build artifacts
+echo "🧹 Cleaning previous build artifacts..."
 rm -rf out
 rm -f game.zip
 
 # 2. Build the project
-# This triggers next build and next export via package.json
+echo "🛠 Building project for production..."
+# Ensure we are in production mode for optimized assets
+export NODE_ENV=production
 npm run build
 
 # 3. Create the archive
 if [ -d "out" ]; then
-  echo "--- 📦 Creating game.zip ---"
-  # Go into the out directory to ensure the zip doesn't contain the 'out' folder itself
+  echo "📦 Packaging game.zip..."
+  
+  # Enter the output directory to ensure a flat zip structure
   cd out
   
-  # Check if zip is installed
-  if command -v zip >/dev/null 2>&1; then
-    zip -r ../game.zip .
-    cd ..
-    echo "--- ✅ Success! Your game.zip is ready for upload. ---"
-  else
-    cd ..
-    echo "--- ⚠️  Warning: 'zip' command not found. ---"
-    echo "The build was successful in the 'out/' folder, but the archive could not be created automatically."
-    exit 1
-  fi
+  # Create the zip file containing all static files at the root
+  zip -q -r ../game.zip .
+  
+  cd ..
+  
+  # Summary
+  FILE_SIZE=$(du -h game.zip | cut -f1)
+  echo "------------------------------------------"
+  echo "✅ SUCCESS: Build complete!"
+  echo "📦 Archive: game.zip ($FILE_SIZE)"
+  echo "📍 Ready for upload to Yandex Games Console"
+  echo "------------------------------------------"
 else
-  echo "--- ❌ Error: Build failed, 'out' directory not found. ---"
+  echo "------------------------------------------"
+  echo "❌ ERROR: Build failed. 'out' directory was not generated."
+  echo "Check the build logs above for more details."
+  echo "------------------------------------------"
   exit 1
 fi
