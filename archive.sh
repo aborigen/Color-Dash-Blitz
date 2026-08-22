@@ -6,8 +6,13 @@
 # Exit on any error
 set -e
 
+# Generate filename with date
+DATE=$(date +%Y-%m-%d)
+ARCHIVE_NAME="game-$DATE.zip"
+
 echo "------------------------------------------"
 echo "🚀 Starting Color Dash Blitz Build Process"
+echo "📅 Date: $DATE"
 echo "------------------------------------------"
 
 # 0. Early Environment Checks
@@ -24,7 +29,8 @@ fi
 # 1. Clean previous build artifacts
 echo "🧹 Cleaning previous build artifacts..."
 rm -rf out
-rm -f game.zip
+# Remove previous game zips to keep workspace clean
+rm -f game-*.zip
 
 # 2. Build the project
 echo "🛠 Building project for production..."
@@ -34,21 +40,21 @@ npm run build
 
 # 3. Create the archive
 if [ -d "out" ]; then
-  echo "📦 Packaging game.zip..."
+  echo "📦 Packaging $ARCHIVE_NAME..."
   
   # Enter the output directory to ensure a flat zip structure
   cd out
   
   # Create the zip file containing all static files at the root
-  zip -q -r ../game.zip .
+  zip -q -r ../$ARCHIVE_NAME .
   
   cd ..
   
   # Summary
-  FILE_SIZE=$(du -h game.zip | cut -f1)
+  FILE_SIZE=$(du -h "$ARCHIVE_NAME" | cut -f1)
   echo "------------------------------------------"
   echo "✅ SUCCESS: Build complete!"
-  echo "📦 Archive: game.zip ($FILE_SIZE)"
+  echo "📦 Archive: $ARCHIVE_NAME ($FILE_SIZE)"
   echo "📍 Ready for upload to Yandex Games Console"
   echo "------------------------------------------"
 else

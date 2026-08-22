@@ -37,15 +37,15 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
    ```bash
    npm run archive
    ```
-   This will generate a `game.zip` file in the root directory.
+   This will generate a date-stamped archive (e.g., `game-2024-05-26.zip`) in the root directory.
 
 ## 📦 Publishing
 
 To publish your game to Yandex Games or other static hosts:
 
 1. Run `npm run archive`.
-2. Locate the `game.zip` file in your project root.
-3. Upload `game.zip` to the platform console.
+2. Locate the generated `.zip` file (e.g., `game-YYYY-MM-DD.zip`) in your project root.
+3. Upload the file to the platform console.
 
 ## 🔗 Connecting to GitHub
 
