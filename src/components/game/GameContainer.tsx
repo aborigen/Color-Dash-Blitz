@@ -239,18 +239,20 @@ export default function GameContainer() {
       <div className="absolute top-[-5%] left-[-5%] w-[30%] h-[30%] bg-primary/10 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-3xl -z-10" />
 
-      {/* Global Controls */}
-      <div className="absolute top-4 left-4 z-20 flex gap-2">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={toggleLanguage} 
-          className="rounded-full bg-white/50 backdrop-blur hover:bg-white/80 h-8 sm:h-9 px-2 sm:px-3 shadow-sm border border-white/20 font-black text-[10px] flex gap-2 items-center"
-        >
-          <Languages className="w-3.5 h-3.5 text-secondary" />
-          <span className="uppercase">{lang}</span>
-        </Button>
-      </div>
+      {/* Global Controls - Only show language toggle in the START menu */}
+      {gameState === 'START' && (
+        <div className="absolute top-4 left-4 z-20 flex gap-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={toggleLanguage} 
+            className="rounded-full bg-white/50 backdrop-blur hover:bg-white/80 h-8 sm:h-9 px-2 sm:px-3 shadow-sm border border-white/20 font-black text-[10px] flex gap-2 items-center"
+          >
+            <Languages className="w-3.5 h-3.5 text-secondary" />
+            <span className="uppercase">{lang}</span>
+          </Button>
+        </div>
+      )}
 
       <div className="absolute top-4 right-4 z-20">
         <Button 
