@@ -85,6 +85,7 @@ export default function GameContainer() {
   useEffect(() => {
     initYandexSDK().then(async (sdkInstance) => {
       if (sdkInstance) {
+        console.log('Game: Initializing environment with Yandex SDK...');
         setSdk(sdkInstance);
         setLang(getLanguage(sdkInstance));
         const config = await fetchRemoteConfig(sdkInstance);
@@ -95,11 +96,12 @@ export default function GameContainer() {
           setUserName(playerData.name);
         }
         
+        // Final signal that the game is ready for interaction
         if (sdkInstance.features?.LoadingAPI?.ready) {
-          console.log('Yandex SDK: Signaling readiness via LoadingAPI.ready()');
+          console.log('Game: [Signal] LoadingAPI.ready()');
           sdkInstance.features.LoadingAPI.ready();
         } else if (sdkInstance.features?.LoadingProgress?.ready) {
-          console.log('Yandex SDK: Signaling readiness via LoadingProgress.ready()');
+          console.log('Game: [Signal] LoadingProgress.ready()');
           sdkInstance.features.LoadingProgress.ready();
         }
       }
@@ -141,6 +143,7 @@ export default function GameContainer() {
   }, [initialTimerValue]);
 
   const endGame = useCallback(async (finalScore: number) => {
+    console.log(`Game: [Game Over] Final round score: ${finalScore}`);
     setGameState('GAMEOVER');
     playSound('gameover');
     
@@ -157,6 +160,7 @@ export default function GameContainer() {
     }
     
     if (finalScore > 0) {
+      console.log('Game: [Leaderboard] Incrementing user score...');
       submitScoreToLeaderboard(sdk, 'leaders', finalScore);
     }
   }, [sdk, lang, playSound, enableFacts]);
@@ -178,6 +182,7 @@ export default function GameContainer() {
   }, [gameState, timer, score, level, endGame]);
 
   const startGame = useCallback(async () => {
+    console.log('Game: [Session Start]');
     setScore(0);
     setFact(null);
     setFeedback(null);
@@ -207,12 +212,12 @@ export default function GameContainer() {
 
   const handleShowLeaderboard = useCallback(async () => {
     if (!sdk) {
-      console.warn('Game: Cannot show leaderboard, SDK not initialized.');
+      console.warn('Game: [Leaderboard] Blocked - SDK not initialized.');
       return;
     }
+    console.log('Game: [UI] Opening leaderboard modal...');
     setIsLeaderboardOpen(true);
     setIsLoadingLeaderboard(true);
-    console.log('Game: Fetching top players...');
     try {
       const entries = await getLeaderboardEntries(sdk, 'leaders', 5);
       setLeaderboardEntries(entries || []);
@@ -222,7 +227,11 @@ export default function GameContainer() {
   }, [sdk]);
 
   const toggleMute = () => setIsMuted(prev => !prev);
-  const toggleLanguage = () => setLang(prev => prev === 'en' ? 'ru' : 'en');
+  const toggleLanguage = () => {
+    const newLang = lang === 'en' ? 'ru' : 'en';
+    console.log(`Game: [Settings] Language changed to: ${newLang}`);
+    setLang(newLang);
+  };
 
   const getGridClasses = (count: number) => {
     if (count >= 12) return 'grid-cols-4 landscape:grid-cols-4';
