@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.2] - 2024-05-26
+
+### Improved
+- **Build Workflow**: Updated `package.json` to automatically set executable permissions for `archive.sh` before building, ensuring smoother operations in Unix-like environments.
+
 ## [0.3.1] - 2024-05-25
 
 ### Fixed

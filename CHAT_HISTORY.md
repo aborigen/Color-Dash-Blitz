@@ -52,6 +52,7 @@ This document tracks the iterative development of **Color Dash Blitz**, document
 - **Outcome**: 
     - Refactored `archive.sh` to provide a professional, date-stamped ZIP archive.
     - Added cleanup logic to remove `404/index.html` from the static export to ensure platform compatibility.
+    - **Executable Permissions**: Updated `package.json` to ensure `archive.sh` is granted executable permissions before running.
 
 ---
 

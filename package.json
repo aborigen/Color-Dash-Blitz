@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "archive": "bash archive.sh"
+    "archive": "chmod +x archive.sh && ./archive.sh"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "^1.28.0",
