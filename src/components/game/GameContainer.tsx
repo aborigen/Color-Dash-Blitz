@@ -2,11 +2,26 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, User } from 'lucide-react';
-import { initYandexSDK, showFullscreenAd, submitScoreToLeaderboard, fetchRemoteConfig, YandexSDK, getLanguage, getPlayerData } from '@/lib/yandex-sdk';
+import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, User, Loader2 } from 'lucide-react';
+import { 
+  initYandexSDK, 
+  showFullscreenAd, 
+  submitScoreToLeaderboard, 
+  fetchRemoteConfig, 
+  getLeaderboardEntries,
+  YandexSDK, 
+  getLanguage, 
+  getPlayerData 
+} from '@/lib/yandex-sdk';
 import { t, tColor, Language } from '@/lib/i18n';
 import { getRandomFact } from '@/lib/facts';
 import { synth } from '@/lib/audio-synth';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 type GameState = 'START' | 'PLAYING' | 'GAMEOVER';
 
@@ -59,6 +74,11 @@ export default function GameContainer() {
   const [lang, setLang] = useState<Language>('en');
   const [userName, setUserName] = useState<string | null>(null);
 
+  // Leaderboard states
+  const [leaderboardEntries, setLeaderboardEntries] = useState<any[]>([]);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
+  const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(false);
+
   const enableFacts = remoteConfig.enable_facts !== false;
   const initialTimerValue = Number(remoteConfig.starting_timer) || 100;
 
@@ -70,13 +90,11 @@ export default function GameContainer() {
         const config = await fetchRemoteConfig(sdkInstance);
         setRemoteConfig(config);
         
-        // Fetch player data for personalization
         const playerData = await getPlayerData(sdkInstance);
         if (playerData && playerData.name && playerData.name !== 'Guest') {
           setUserName(playerData.name);
         }
         
-        // Signal platform readiness
         if (sdkInstance.features?.LoadingAPI?.ready) {
           console.log('Yandex SDK: Signaling readiness via LoadingAPI.ready()');
           sdkInstance.features.LoadingAPI.ready();
@@ -192,20 +210,14 @@ export default function GameContainer() {
       console.warn('Game: Cannot show leaderboard, SDK not initialized.');
       return;
     }
-    console.log('Yandex SDK: Requesting leaderboard display/data...');
+    setIsLeaderboardOpen(true);
+    setIsLoadingLeaderboard(true);
+    console.log('Game: Fetching top players...');
     try {
-      // Modern access to leaderboards
-      const lb = typeof (sdk as any).leaderboards === 'function' 
-        ? await (sdk as any).leaderboards() 
-        : (sdk as any).leaderboards;
-      
-      if (lb && lb.getEntries) {
-        console.log('Yandex SDK: Fetching leaderboard entries for ID: leaders');
-        const entries = await lb.getEntries('leaders', { includeUser: true });
-        console.log('Yandex SDK: Leaderboard entries fetched:', entries);
-      }
-    } catch (err) {
-      console.error('Yandex SDK: Could not access leaderboards', err);
+      const entries = await getLeaderboardEntries(sdk, 'leaders', 5);
+      setLeaderboardEntries(entries || []);
+    } finally {
+      setIsLoadingLeaderboard(false);
     }
   }, [sdk]);
 
@@ -407,6 +419,79 @@ export default function GameContainer() {
           </div>
         </div>
       )}
+
+      {/* Leaderboard Modal */}
+      <Dialog open={isLeaderboardOpen} onOpenChange={setIsLeaderboardOpen}>
+        <DialogContent className="max-w-[90vw] sm:max-w-[400px] rounded-3xl border-none shadow-2xl p-0 overflow-hidden bg-background">
+          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
+          <DialogHeader className="p-6 pb-2 text-center">
+            <DialogTitle className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-foreground flex items-center justify-center gap-2">
+              <Trophy className="w-6 h-6 text-secondary" />
+              {t(lang, 'topPlayers')}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="p-4 sm:p-6 pt-2 space-y-2">
+            {isLoadingLeaderboard ? (
+              <div className="flex flex-col items-center justify-center py-12 gap-4">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t(lang, 'loading')}</span>
+              </div>
+            ) : leaderboardEntries.length > 0 ? (
+              <div className="space-y-2">
+                <div className="grid grid-cols-6 px-3 py-1 mb-1">
+                   <span className="col-span-1 text-[8px] font-black text-muted-foreground uppercase">{t(lang, 'rank')}</span>
+                   <span className="col-span-3 text-[8px] font-black text-muted-foreground uppercase">{t(lang, 'welcome').split(',')[0]}</span>
+                   <span className="col-span-2 text-[8px] font-black text-muted-foreground uppercase text-right">{t(lang, 'scoreLabel')}</span>
+                </div>
+                {leaderboardEntries.map((entry, idx) => (
+                  <div 
+                    key={idx}
+                    className={`grid grid-cols-6 items-center p-3 rounded-2xl border transition-all ${idx === 0 ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-white/50 border-white/80'}`}
+                  >
+                    <div className="col-span-1 flex items-center justify-center">
+                      <span className={`text-sm font-black w-6 h-6 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
+                        {entry.rank}
+                      </span>
+                    </div>
+                    <div className="col-span-3 flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center overflow-hidden border border-secondary/20">
+                        {entry.player?.getPhoto ? (
+                          <img src={entry.player.getPhoto('small')} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <User className="w-4 h-4 text-secondary" />
+                        )}
+                      </div>
+                      <span className="text-[10px] sm:text-xs font-bold truncate text-foreground/90 uppercase tracking-tight">
+                        {entry.player?.getName() || 'Blitz Master'}
+                      </span>
+                    </div>
+                    <div className="col-span-2 text-right">
+                      <span className="text-sm sm:text-base font-black text-primary tabular-nums">
+                        {entry.score}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 text-center opacity-50">
+                <Zap className="w-12 h-12 mb-2 text-muted-foreground" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t(lang, 'noData')}</span>
+              </div>
+            )}
+          </div>
+          
+          <div className="p-4 bg-muted/30 border-t border-white/20">
+            <Button 
+              className="w-full h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]"
+              onClick={() => setIsLeaderboardOpen(false)}
+            >
+              {t(lang, 'mainMenu')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

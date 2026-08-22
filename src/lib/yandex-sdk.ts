@@ -155,6 +155,34 @@ export async function submitScoreToLeaderboard(sdk: YandexSDK | null, leaderboar
 }
 
 /**
+ * Fetches the top N entries from a leaderboard.
+ */
+export async function getLeaderboardEntries(sdk: YandexSDK | null, leaderboardName: string, quantity: number = 5) {
+  if (!sdk) {
+    console.warn('Yandex SDK: Cannot fetch leaderboard, SDK not initialized.');
+    return null;
+  }
+  console.log(`Yandex SDK: Fetching top ${quantity} entries for leaderboard "${leaderboardName}"...`);
+  try {
+    const lb = typeof (sdk as any).leaderboards === 'function' 
+      ? await (sdk as any).leaderboards() 
+      : (sdk as any).leaderboards;
+    
+    if (lb && lb.getEntries) {
+      const res = await lb.getEntries(leaderboardName, { 
+        quantityTop: quantity,
+        includeUser: true
+      });
+      console.log('Yandex SDK: Leaderboard entries fetched:', res.entries);
+      return res.entries;
+    }
+  } catch (err) {
+    console.error('Yandex SDK: Could not fetch leaderboard entries', err);
+  }
+  return null;
+}
+
+/**
  * Fetches remote configuration from Yandex Games Console.
  */
 export async function fetchRemoteConfig(sdk: YandexSDK | null): Promise<Record<string, any>> {

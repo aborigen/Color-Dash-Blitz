@@ -17,6 +17,11 @@ export const translations = {
     retryBlitz: "RETRY BLITZ",
     mainMenu: "MAIN MENU",
     factFallback: "Color theory is the art and science of how colors interact!",
+    topPlayers: "TOP 5 BLITZERS",
+    rank: "RANK",
+    scoreLabel: "SCORE",
+    loading: "LOADING...",
+    noData: "NO DATA YET",
     colors: {
       'Red': 'Red',
       'Blue': 'Blue',
@@ -48,6 +53,11 @@ export const translations = {
     retryBlitz: "ПОВТОРИТЬ",
     mainMenu: "В МЕНЮ",
     factFallback: "Теория цвета — это искусство и наука о взаимодействии цветов!",
+    topPlayers: "ТОП-5 ИГРОКОВ",
+    rank: "МЕСТО",
+    scoreLabel: "СЧЕТ",
+    loading: "ЗАГРУЗКА...",
+    noData: "ДАННЫХ НЕТ",
     colors: {
       'Red': 'Красный',
       'Blue': 'Синий',
