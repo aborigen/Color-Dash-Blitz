@@ -49,7 +49,9 @@ This document tracks the iterative development of **Color Dash Blitz**, document
 
 ### 8. Build & DevOps
 - **Task**: Simplify the publishing workflow.
-- **Outcome**: Refactored `archive.sh` to provide a professional, date-stamped ZIP archive of the production build, ready for upload.
+- **Outcome**: 
+    - Refactored `archive.sh` to provide a professional, date-stamped ZIP archive.
+    - Added cleanup logic to remove `404/index.html` from the static export to ensure platform compatibility.
 
 ---
 
