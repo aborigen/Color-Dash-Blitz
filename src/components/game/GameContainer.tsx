@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, User, Loader2 } from 'lucide-react';
+import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, User, Loader2, Moon, Sun } from 'lucide-react';
 import { 
   initYandexSDK, 
   showFullscreenAd, 
@@ -71,6 +71,7 @@ export default function GameContainer() {
   const [sdk, setSdk] = useState<YandexSDK | null>(null);
   const [remoteConfig, setRemoteConfig] = useState<Record<string, any>>({});
   const [isMuted, setIsMuted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<Language>('en');
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -96,7 +97,6 @@ export default function GameContainer() {
           setUserName(playerData.name);
         }
         
-        // Final signal that the game is ready for interaction
         if (sdkInstance.features?.LoadingAPI?.ready) {
           console.log('Game: [Signal] LoadingAPI.ready()');
           sdkInstance.features.LoadingAPI.ready();
@@ -107,6 +107,14 @@ export default function GameContainer() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   const playSound = useCallback((type: 'correct' | 'wrong' | 'start' | 'gameover') => {
     if (isMuted || !synth) return;
@@ -227,6 +235,7 @@ export default function GameContainer() {
   }, [sdk]);
 
   const toggleMute = () => setIsMuted(prev => !prev);
+  const toggleDark = () => setIsDark(prev => !prev);
   const toggleLanguage = () => {
     const newLang = lang === 'en' ? 'ru' : 'en';
     console.log(`Game: [Settings] Language changed to: ${newLang}`);
@@ -242,33 +251,41 @@ export default function GameContainer() {
 
   return (
     <div 
-      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none"
+      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none transition-colors duration-300"
       onContextMenu={(e) => e.preventDefault()}
     >
       <div className="absolute top-[-5%] left-[-5%] w-[30%] h-[30%] bg-primary/10 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-3xl -z-10" />
 
-      {/* Global Controls - Only show language toggle in the START menu */}
-      {gameState === 'START' && (
-        <div className="absolute top-4 left-4 z-20 flex gap-2">
+      {/* Global Controls */}
+      <div className="absolute top-4 left-4 z-20 flex gap-2">
+        {gameState === 'START' && (
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={toggleLanguage} 
-            className="rounded-full bg-white/50 backdrop-blur hover:bg-white/80 h-8 sm:h-9 px-2 sm:px-3 shadow-sm border border-white/20 font-black text-[10px] flex gap-2 items-center"
+            className="rounded-full bg-white/50 dark:bg-black/50 backdrop-blur hover:bg-white/80 dark:hover:bg-black/80 h-8 sm:h-9 px-2 sm:px-3 shadow-sm border border-white/20 dark:border-white/10 font-black text-[10px] flex gap-2 items-center"
           >
             <Languages className="w-3.5 h-3.5 text-secondary" />
-            <span className="uppercase">{lang}</span>
+            <span className="uppercase text-foreground">{lang}</span>
           </Button>
-        </div>
-      )}
+        )}
+      </div>
 
-      <div className="absolute top-4 right-4 z-20">
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={toggleDark} 
+          className="rounded-full bg-white/50 dark:bg-black/50 backdrop-blur hover:bg-white/80 dark:hover:bg-black/80 h-8 w-8 sm:h-9 sm:w-9 shadow-sm border border-white/20 dark:border-white/10"
+        >
+          {isDark ? <Sun className="w-4 h-4 text-yellow-500" /> : <Moon className="w-4 h-4 text-slate-700" />}
+        </Button>
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={toggleMute} 
-          className="rounded-full bg-white/50 backdrop-blur hover:bg-white/80 h-8 w-8 sm:h-9 sm:w-9 shadow-sm border border-white/20"
+          className="rounded-full bg-white/50 dark:bg-black/50 backdrop-blur hover:bg-white/80 dark:hover:bg-black/80 h-8 w-8 sm:h-9 sm:w-9 shadow-sm border border-white/20 dark:border-white/10"
         >
           {isMuted ? <VolumeX className="w-4 h-4 text-muted-foreground" /> : <Volume2 className="w-4 h-4 text-primary" />}
         </Button>
@@ -278,7 +295,7 @@ export default function GameContainer() {
         <div className="flex flex-col landscape:flex-row items-center justify-center flex-1 w-full gap-4 sm:gap-8 landscape:gap-12 animate-in fade-in zoom-in duration-500 overflow-hidden">
           <div className="relative inline-block text-center scale-[0.8] sm:scale-100 transition-transform">
              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-[1.5rem] sm:rounded-[2rem] blur-xl opacity-20"></div>
-             <div className="relative bg-white/80 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-white/50">
+             <div className="relative bg-white/80 dark:bg-black/40 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-white/50 dark:border-white/10">
                {userName && (
                  <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4 px-3 py-1 bg-secondary/10 rounded-full border border-secondary/20 w-fit mx-auto animate-in slide-in-from-top-4 duration-700">
                     <User className="w-3 h-3 text-secondary" />
@@ -309,12 +326,12 @@ export default function GameContainer() {
               <Button 
                 variant="ghost"
                 onClick={handleShowLeaderboard}
-                className="h-auto py-2 sm:py-3 px-0 bg-white/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/50 flex flex-col items-center justify-center text-center hover:bg-white/80 active:translate-y-0.5 transition-all shadow-sm"
+                className="h-auto py-2 sm:py-3 px-0 bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/50 dark:border-white/10 flex flex-col items-center justify-center text-center hover:bg-white/80 dark:hover:bg-white/10 active:translate-y-0.5 transition-all shadow-sm"
               >
                 <Trophy className="w-4 h-4 mb-1 text-secondary" />
                 <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'leaderboards')}</span>
               </Button>
-              <div className="bg-white/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/50 flex flex-col items-center justify-center text-center shadow-sm">
+              <div className="bg-white/50 dark:bg-white/5 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/50 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-sm">
                 <Zap className="w-4 h-4 mb-1 text-primary" />
                 <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'quickReflex')}</span>
               </div>
@@ -326,12 +343,12 @@ export default function GameContainer() {
       {gameState === 'PLAYING' && level && (
         <div className={`w-full h-full flex flex-col items-center justify-between py-2 sm:py-4 overflow-hidden ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
           <div className="w-full flex justify-between items-center px-1 shrink-0 pt-10 sm:pt-0 max-w-xl mx-auto">
-             <div className="bg-white/80 backdrop-blur px-2.5 py-1 rounded-full shadow-lg flex items-center gap-2 border border-primary/10">
+             <div className="bg-white/80 dark:bg-white/10 backdrop-blur px-2.5 py-1 rounded-full shadow-lg flex items-center gap-2 border border-primary/10">
                 <Trophy className="w-3.5 h-3.5 text-secondary" />
                 <span className="text-base font-black text-foreground tabular-nums">{score}</span>
              </div>
              <div className="flex-1 max-w-[120px] sm:max-w-[150px] ml-4">
-                <div className="relative h-2.5 sm:h-3 w-full bg-white/50 rounded-full border border-white overflow-hidden shadow-inner">
+                <div className="relative h-2.5 sm:h-3 w-full bg-white/50 dark:bg-white/5 rounded-full border border-white dark:border-white/10 overflow-hidden shadow-inner">
                   <div 
                     className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-100 ease-linear"
                     style={{ width: `${timer}%` }}
@@ -347,9 +364,9 @@ export default function GameContainer() {
               </div>
               
               <div className="relative flex items-center justify-center min-h-0 overflow-hidden py-2">
-                <div className="absolute -inset-4 bg-white/40 blur-2xl rounded-full" />
+                <div className="absolute -inset-4 bg-white/40 dark:bg-white/5 blur-2xl rounded-full" />
                 <div 
-                  className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
+                  className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
                   style={{ backgroundColor: level.target.hex }}
                 />
                 {feedback === 'CORRECT' && (
@@ -368,7 +385,7 @@ export default function GameContainer() {
                   <button
                     key={`${choice.name}-${i}`}
                     onClick={() => handleChoice(choice)}
-                    className="aspect-square rounded-lg sm:rounded-xl shadow-[0_2px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-0.5 active:shadow-none relative overflow-hidden border-2 sm:border-4 border-white/80"
+                    className="aspect-square rounded-lg sm:rounded-xl shadow-[0_2px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-0.5 active:shadow-none relative overflow-hidden border-2 sm:border-4 border-white/80 dark:border-white/10"
                     style={{ backgroundColor: choice.hex }}
                   >
                     <div className="absolute inset-0 bg-white opacity-0 active:opacity-20 transition-opacity" />
@@ -382,7 +399,7 @@ export default function GameContainer() {
 
       {gameState === 'GAMEOVER' && (
         <div className="flex flex-col landscape:flex-row items-center justify-center h-full w-full gap-4 sm:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden pt-12 sm:pt-0 max-w-4xl mx-auto">
-          <div className="bg-white p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full max-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
+          <div className="bg-white dark:bg-black/40 p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full max-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
             <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-primary/5 rounded-full -mr-8 -mt-8 sm:-mr-12 sm:-mt-12" />
             <h2 className="text-sm sm:text-2xl font-black text-foreground mb-1 sm:mb-4 uppercase tracking-tight">{t(lang, 'blitzOver')}</h2>
             <div className="text-4xl sm:text-7xl font-black text-primary mb-1 tracking-tighter tabular-nums leading-none">{score}</div>
@@ -391,7 +408,7 @@ export default function GameContainer() {
 
           <div className="w-full max-sm space-y-3 sm:space-y-4 flex flex-col flex-1 min-h-0 justify-between overflow-hidden landscape:flex-1">
             {enableFacts && fact && (
-              <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-secondary/20 relative w-full shadow-sm overflow-y-auto no-scrollbar flex-1 min-h-[60px] max-h-[30dvh] landscape:max-h-[50dvh]">
+              <div className="bg-white/80 dark:bg-white/5 backdrop-blur-sm p-3 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-secondary/20 relative w-full shadow-sm overflow-y-auto no-scrollbar flex-1 min-h-[60px] max-h-[30dvh] landscape:max-h-[50dvh]">
                 <div className="absolute top-1.5 left-3 bg-secondary text-white px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest flex items-center gap-1 shadow-md z-10">
                   <Info className="w-2.5 h-2.5" />
                   {t(lang, 'colorFact')}
@@ -422,7 +439,7 @@ export default function GameContainer() {
                 variant="outline" 
                 onClick={() => setGameState('START')} 
                 size="lg" 
-                className="h-10 sm:h-14 text-[9px] sm:text-xs font-black border-2 border-muted rounded-[1rem] sm:rounded-2xl text-muted-foreground hover:bg-muted transition-all w-full uppercase tracking-widest"
+                className="h-10 sm:h-14 text-[9px] sm:text-xs font-black border-2 border-muted dark:border-white/10 rounded-[1rem] sm:rounded-2xl text-muted-foreground hover:bg-muted dark:hover:bg-white/5 transition-all w-full uppercase tracking-widest"
               >
                 {t(lang, 'mainMenu')}
               </Button>
@@ -458,7 +475,7 @@ export default function GameContainer() {
                 {leaderboardEntries.map((entry, idx) => (
                   <div 
                     key={idx}
-                    className={`grid grid-cols-6 items-center p-3 rounded-2xl border transition-all ${idx === 0 ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-white/50 border-white/80'}`}
+                    className={`grid grid-cols-6 items-center p-3 rounded-2xl border transition-all ${idx === 0 ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-white/50 dark:bg-white/5 border-white/80 dark:border-white/10'}`}
                   >
                     <div className="col-span-1 flex items-center justify-center">
                       <span className={`text-sm font-black w-6 h-6 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
@@ -493,7 +510,7 @@ export default function GameContainer() {
             )}
           </div>
           
-          <div className="p-4 bg-muted/30 border-t border-white/20">
+          <div className="p-4 bg-muted/30 border-t border-white/20 dark:border-white/10">
             <Button 
               className="w-full h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]"
               onClick={() => setIsLeaderboardOpen(false)}

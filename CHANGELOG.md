@@ -2,6 +2,12 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.5] - 2024-05-29
+
+### Added
+- **Dark Mode**: Implemented a comprehensive dark theme with HSL variable refinements and a persistent UI toggle (Sun/Moon icons).
+- **Smooth Transitions**: Added CSS transitions for background and text colors to ensure a professional feel during theme switching.
+
 ## [0.3.4] - 2024-05-28
 
 ### Fixed

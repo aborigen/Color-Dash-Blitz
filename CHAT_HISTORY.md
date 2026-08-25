@@ -33,13 +33,13 @@ This document tracks the iterative development of **Color Dash Blitz**, document
     - Created a Genkit flow for generating interesting facts about color theory.
     - Implemented a static fallback library (`src/lib/facts.ts`) for zero-dependency production builds.
 
-### 6. UI/UX Refinements
-- **Task**: Polish the arcade feel and mobile experience.
+### 6. UI/UX Refinements & Dark Mode
+- **Task**: Polish the arcade feel and add theme support.
 - **Outcome**:
     - Added high-energy animations (`game-bounce`, `game-shake`).
     - Implemented an internal Web Audio API synthesizer for zero-asset sound effects.
-    - Refactored the Leaderboard button into a full modal showing the **Top 5 players** with avatars and scores.
-    - Hidden the language toggle during active gameplay for a cleaner HUD.
+    - Refactored the Leaderboard button into a full modal showing the **Top 5 players**.
+    - **Dark Mode**: Added HSL variable support and a Sun/Moon toggle button for a custom visual experience.
 
 ### 7. Marketing & Assets
 - **Task**: Generate assets for the Yandex Games Console.
@@ -62,3 +62,4 @@ This document tracks the iterative development of **Color Dash Blitz**, document
 - **Core Tech**: Next.js (Static Export), TypeScript, ShadCN UI, Genkit AI.
 - **Leaderboard ID**: `leaders` (Cumulative scoring).
 - **Language Mapping**: English (`en`), Russian (`ru`).
+- **Theme**: Light/Dark support via `.dark` CSS class.
