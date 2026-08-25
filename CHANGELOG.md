@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.6] - 2024-05-30
+
+### Fixed
+- **Leaderboard Crash**: Resolved `TypeError: s.getName is not a function` by implementing defensive player data extraction in the UI. The component now safely handles both SDK objects with methods and plain objects with properties for leaderboard entries.
+
 ## [0.3.5] - 2024-05-29
 
 ### Added

@@ -249,6 +249,26 @@ export default function GameContainer() {
     return 'grid-cols-2 landscape:grid-cols-3';
   };
 
+  // Helper to safely extract player data from leaderboard entry
+  const getPlayerDisplayData = (player: any) => {
+    if (!player) return { name: 'Blitz Master', photo: null };
+    
+    const name = typeof player.getName === 'function' 
+      ? player.getName() 
+      : (player.publicName || player.name || 'Blitz Master');
+      
+    let photo = null;
+    if (typeof player.getPhoto === 'function') {
+      photo = player.getPhoto('small');
+    } else if (typeof player.getAvatarSrc === 'function') {
+      photo = player.getAvatarSrc('small');
+    } else {
+      photo = player.avatarSrc || player.photo || null;
+    }
+    
+    return { name, photo };
+  };
+
   return (
     <div 
       className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none transition-colors duration-300"
@@ -472,35 +492,38 @@ export default function GameContainer() {
                    <span className="col-span-3 text-[8px] font-black text-muted-foreground uppercase">{t(lang, 'welcome').split(',')[0]}</span>
                    <span className="col-span-2 text-[8px] font-black text-muted-foreground uppercase text-right">{t(lang, 'scoreLabel')}</span>
                 </div>
-                {leaderboardEntries.map((entry, idx) => (
-                  <div 
-                    key={idx}
-                    className={`grid grid-cols-6 items-center p-3 rounded-2xl border transition-all ${idx === 0 ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-white/50 dark:bg-white/5 border-white/80 dark:border-white/10'}`}
-                  >
-                    <div className="col-span-1 flex items-center justify-center">
-                      <span className={`text-sm font-black w-6 h-6 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
-                        {entry.rank}
-                      </span>
-                    </div>
-                    <div className="col-span-3 flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center overflow-hidden border border-secondary/20">
-                        {entry.player?.getPhoto ? (
-                          <img src={entry.player.getPhoto('small')} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <User className="w-4 h-4 text-secondary" />
-                        )}
+                {leaderboardEntries.map((entry, idx) => {
+                  const playerInfo = getPlayerDisplayData(entry.player);
+                  return (
+                    <div 
+                      key={idx}
+                      className={`grid grid-cols-6 items-center p-3 rounded-2xl border transition-all ${idx === 0 ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-white/50 dark:bg-white/5 border-white/80 dark:border-white/10'}`}
+                    >
+                      <div className="col-span-1 flex items-center justify-center">
+                        <span className={`text-sm font-black w-6 h-6 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
+                          {entry.rank}
+                        </span>
                       </div>
-                      <span className="text-[10px] sm:text-xs font-bold truncate text-foreground/90 uppercase tracking-tight">
-                        {entry.player?.getName() || 'Blitz Master'}
-                      </span>
+                      <div className="col-span-3 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center overflow-hidden border border-secondary/20">
+                          {playerInfo.photo ? (
+                            <img src={playerInfo.photo} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <User className="w-4 h-4 text-secondary" />
+                          )}
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-bold truncate text-foreground/90 uppercase tracking-tight">
+                          {playerInfo.name}
+                        </span>
+                      </div>
+                      <div className="col-span-2 text-right">
+                        <span className="text-sm sm:text-base font-black text-primary tabular-nums">
+                          {entry.score}
+                        </span>
+                      </div>
                     </div>
-                    <div className="col-span-2 text-right">
-                      <span className="text-sm sm:text-base font-black text-primary tabular-nums">
-                        {entry.score}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center opacity-50">

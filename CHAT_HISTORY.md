@@ -40,6 +40,7 @@ This document tracks the iterative development of **Color Dash Blitz**, document
     - Implemented an internal Web Audio API synthesizer for zero-asset sound effects.
     - Refactored the Leaderboard button into a full modal showing the **Top 5 players**.
     - **Dark Mode**: Added HSL variable support and a Sun/Moon toggle button for a custom visual experience.
+    - **Fix**: Resolved `getName is not a function` error in leaderboards by implementing a defensive data extraction helper.
 
 ### 7. Marketing & Assets
 - **Task**: Generate assets for the Yandex Games Console.
