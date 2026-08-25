@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.4] - 2024-05-28
+
+### Fixed
+- **Yandex SDK Deprecation**: Completely removed the deprecated `ysdk.getLeaderboards()` method. The SDK bridge now exclusively uses the modern `ysdk.leaderboards` property, supporting both object and async function access patterns to ensure full compatibility with the latest Yandex Games standards.
+
 ## [0.3.3] - 2024-05-27
 
 ### Fixed

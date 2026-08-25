@@ -15,7 +15,7 @@ This document tracks the iterative development of **Color Dash Blitz**, document
 - **Outcome**: 
     - Implemented a robust SDK bridge (`src/lib/yandex-sdk.ts`) with retry logic.
     - Integrated Full-screen Ads, Remote Configuration, and Global Leaderboards.
-    - Switched to `ysdk.leaderboards` to resolve deprecation errors.
+    - **Fix**: Resolved `ysdk.getLeaderboards()` deprecation by moving to the modern `ysdk.leaderboards` property.
     - Implemented `LoadingAPI.ready()` to signal game readiness.
     - **Fix**: Resolved `API structure unexpected` error for leaderboards by implementing a defensive detection helper (`getLBManager`).
 
