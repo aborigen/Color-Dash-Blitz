@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.4.1] - 2024-06-03
+
+### Changed
+- **Mobile Grid Optimization**: Refined the game choice grid to be more adaptable to small screens, improving column distribution and button scaling.
+
 ## [0.4.0] - 2024-06-02
 
 ### Changed

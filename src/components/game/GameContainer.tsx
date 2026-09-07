@@ -243,10 +243,14 @@ export default function GameContainer() {
   };
 
   const getGridClasses = (count: number) => {
-    if (count >= 12) return 'grid-cols-4 landscape:grid-cols-4';
-    if (count >= 8) return 'grid-cols-3 landscape:grid-cols-4';
-    if (count >= 5) return 'grid-cols-2 sm:grid-cols-3 landscape:grid-cols-3';
-    return 'grid-cols-2 landscape:grid-cols-3';
+    // Dynamic columns based on count for best mobile utilization
+    if (count === 3) return 'grid-cols-3';
+    if (count === 4) return 'grid-cols-2';
+    if (count === 6) return 'grid-cols-3';
+    if (count === 8) return 'grid-cols-4';
+    if (count === 9) return 'grid-cols-3';
+    if (count === 12) return 'grid-cols-4';
+    return 'grid-cols-3';
   };
 
   // Helper to safely extract player data from leaderboard entry
@@ -383,7 +387,7 @@ export default function GameContainer() {
                 <h2 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{t(lang, 'matchThis')}</h2>
               </div>
               
-              <div className="relative flex items-center justify-center min-h-0 overflow-hidden py-2">
+              <div className="relative flex items-center justify-center min-h-0 overflow-hidden py-1 sm:py-2">
                 <div className="absolute -inset-4 bg-white/40 dark:bg-white/5 blur-2xl rounded-full" />
                 <div 
                   className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
@@ -399,8 +403,8 @@ export default function GameContainer() {
               <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
             </div>
 
-            <div className="w-full max-w-[320px] sm:max-w-[440px] landscape:max-w-[400px] px-2 sm:px-4 pb-2 sm:pb-8 shrink-0 flex items-center justify-center">
-              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-1.5 sm:gap-3 w-full`}>
+            <div className="w-full max-w-[340px] sm:max-w-[440px] landscape:max-w-[400px] px-2 sm:px-4 pb-2 sm:pb-8 shrink-0 flex items-center justify-center">
+              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-2 sm:gap-3 w-full`}>
                 {level.choices.map((choice, i) => (
                   <button
                     key={`${choice.name}-${i}`}

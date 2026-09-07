@@ -26,3 +26,7 @@ This document tracks the iterative development of **Color Dash Blitz**.
 
 ### 5. Build & Publishing
 - Refactored `archive.sh` for date-stamped ZIP files and automatic permission setting.
+
+### 6. Mobile Experience Refinement
+- **Task**: Adapt game grid for small mobile screens.
+- **Outcome**: Optimized `getGridClasses` for better column distribution and adjusted UI scaling for compact devices.
