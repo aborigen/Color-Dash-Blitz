@@ -30,3 +30,7 @@ This document tracks the iterative development of **Color Dash Blitz**.
 ### 6. Mobile Experience Refinement
 - **Task**: Adapt game grid for small mobile screens.
 - **Outcome**: Optimized `getGridClasses` for better column distribution and adjusted UI scaling for compact devices.
+
+### 7. Standalone Transition
+- **Task**: Remove Yandex Games SDK implementation.
+- **Outcome**: Completely stripped Yandex SDK dependencies, scripts, and platform-specific features to make the game a standalone static web app.

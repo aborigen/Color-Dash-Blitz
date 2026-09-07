@@ -2,26 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, User, Loader2, Moon, Sun } from 'lucide-react';
-import { 
-  initYandexSDK, 
-  showFullscreenAd, 
-  submitScoreToLeaderboard, 
-  fetchRemoteConfig, 
-  getLeaderboardEntries,
-  YandexSDK, 
-  getLanguage, 
-  getPlayerData 
-} from '@/lib/yandex-sdk';
+import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, Moon, Sun } from 'lucide-react';
 import { t, tColor, Language } from '@/lib/i18n';
 import { getRandomFact } from '@/lib/facts';
 import { synth } from '@/lib/audio-synth';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 
 type GameState = 'START' | 'PLAYING' | 'GAMEOVER';
 
@@ -68,44 +52,19 @@ export default function GameContainer() {
   const [fact, setFact] = useState<string | null>(null);
   const [loadingFact, setLoadingFact] = useState(false);
   const [feedback, setFeedback] = useState<'CORRECT' | 'WRONG' | null>(null);
-  const [sdk, setSdk] = useState<YandexSDK | null>(null);
-  const [remoteConfig, setRemoteConfig] = useState<Record<string, any>>({});
   const [isMuted, setIsMuted] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<Language>('en');
-  const [userName, setUserName] = useState<string | null>(null);
 
-  // Leaderboard states
-  const [leaderboardEntries, setLeaderboardEntries] = useState<any[]>([]);
-  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
-  const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(false);
-
-  const enableFacts = remoteConfig.enable_facts !== false;
-  const initialTimerValue = Number(remoteConfig.starting_timer) || 100;
+  const enableFacts = true;
+  const initialTimerValue = 100;
 
   useEffect(() => {
-    initYandexSDK().then(async (sdkInstance) => {
-      if (sdkInstance) {
-        console.log('Game: Initializing environment with Yandex SDK...');
-        setSdk(sdkInstance);
-        setLang(getLanguage(sdkInstance));
-        const config = await fetchRemoteConfig(sdkInstance);
-        setRemoteConfig(config);
-        
-        const playerData = await getPlayerData(sdkInstance);
-        if (playerData && playerData.name && playerData.name !== 'Guest') {
-          setUserName(playerData.name);
-        }
-        
-        if (sdkInstance.features?.LoadingAPI?.ready) {
-          console.log('Game: [Signal] LoadingAPI.ready()');
-          sdkInstance.features.LoadingAPI.ready();
-        } else if (sdkInstance.features?.LoadingProgress?.ready) {
-          console.log('Game: [Signal] LoadingProgress.ready()');
-          sdkInstance.features.LoadingProgress.ready();
-        }
-      }
-    });
+    // Detect system language
+    if (typeof window !== 'undefined') {
+      const browserLang = window.navigator.language.split('-')[0];
+      if (browserLang === 'ru') setLang('ru');
+    }
   }, []);
 
   useEffect(() => {
@@ -151,7 +110,6 @@ export default function GameContainer() {
   }, [initialTimerValue]);
 
   const endGame = useCallback(async (finalScore: number) => {
-    console.log(`Game: [Game Over] Final round score: ${finalScore}`);
     setGameState('GAMEOVER');
     playSound('gameover');
     
@@ -162,16 +120,7 @@ export default function GameContainer() {
         setLoadingFact(false);
       }, 500);
     }
-
-    if (Math.random() > 0.6) {
-      await showFullscreenAd(sdk);
-    }
-    
-    if (finalScore > 0) {
-      console.log('Game: [Leaderboard] Incrementing user score...');
-      submitScoreToLeaderboard(sdk, 'leaders', finalScore);
-    }
-  }, [sdk, lang, playSound, enableFacts]);
+  }, [lang, playSound]);
 
   useEffect(() => {
     if (gameState === 'PLAYING') {
@@ -190,7 +139,6 @@ export default function GameContainer() {
   }, [gameState, timer, score, level, endGame]);
 
   const startGame = useCallback(async () => {
-    console.log('Game: [Session Start]');
     setScore(0);
     setFact(null);
     setFeedback(null);
@@ -218,32 +166,13 @@ export default function GameContainer() {
     }
   }, [level, generateLevel, score, playSound]);
 
-  const handleShowLeaderboard = useCallback(async () => {
-    if (!sdk) {
-      console.warn('Game: [Leaderboard] Blocked - SDK not initialized.');
-      return;
-    }
-    console.log('Game: [UI] Opening leaderboard modal...');
-    setIsLeaderboardOpen(true);
-    setIsLoadingLeaderboard(true);
-    try {
-      const entries = await getLeaderboardEntries(sdk, 'leaders', 5);
-      setLeaderboardEntries(entries || []);
-    } finally {
-      setIsLoadingLeaderboard(false);
-    }
-  }, [sdk]);
-
   const toggleMute = () => setIsMuted(prev => !prev);
   const toggleDark = () => setIsDark(prev => !prev);
   const toggleLanguage = () => {
-    const newLang = lang === 'en' ? 'ru' : 'en';
-    console.log(`Game: [Settings] Language changed to: ${newLang}`);
-    setLang(newLang);
+    setLang(prev => prev === 'en' ? 'ru' : 'en');
   };
 
   const getGridClasses = (count: number) => {
-    // Dynamic columns based on count for best mobile utilization
     if (count === 3) return 'grid-cols-3';
     if (count === 4) return 'grid-cols-2';
     if (count === 6) return 'grid-cols-3';
@@ -251,26 +180,6 @@ export default function GameContainer() {
     if (count === 9) return 'grid-cols-3';
     if (count === 12) return 'grid-cols-4';
     return 'grid-cols-3';
-  };
-
-  // Helper to safely extract player data from leaderboard entry
-  const getPlayerDisplayData = (player: any) => {
-    if (!player) return { name: 'Blitz Master', photo: null };
-    
-    const name = typeof player.getName === 'function' 
-      ? player.getName() 
-      : (player.publicName || player.name || 'Blitz Master');
-      
-    let photo = null;
-    if (typeof player.getPhoto === 'function') {
-      photo = player.getPhoto('small');
-    } else if (typeof player.getAvatarSrc === 'function') {
-      photo = player.getAvatarSrc('small');
-    } else {
-      photo = player.avatarSrc || player.photo || null;
-    }
-    
-    return { name, photo };
   };
 
   return (
@@ -320,12 +229,6 @@ export default function GameContainer() {
           <div className="relative inline-block text-center scale-[0.8] sm:scale-100 transition-transform">
              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-[1.5rem] sm:rounded-[2rem] blur-xl opacity-20"></div>
              <div className="relative bg-white/80 dark:bg-black/40 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-white/50 dark:border-white/10">
-               {userName && (
-                 <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4 px-3 py-1 bg-secondary/10 rounded-full border border-secondary/20 w-fit mx-auto animate-in slide-in-from-top-4 duration-700">
-                    <User className="w-3 h-3 text-secondary" />
-                    <span className="text-[9px] font-black text-secondary uppercase tracking-wider">{t(lang, 'welcome')} {userName}</span>
-                 </div>
-               )}
                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-primary/10 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 animate-bounce">
                  <Zap className="w-6 h-6 sm:w-10 sm:h-10 text-primary fill-current" />
                </div>
@@ -345,20 +248,10 @@ export default function GameContainer() {
               <span>{t(lang, 'playNow')}</span>
               <span className="text-[8px] sm:text-[9px] font-bold opacity-70 tracking-widest">{t(lang, 'startBlitzing')}</span>
             </Button>
-
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              <Button 
-                variant="ghost"
-                onClick={handleShowLeaderboard}
-                className="h-auto py-2 sm:py-3 px-0 bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/50 dark:border-white/10 flex flex-col items-center justify-center text-center hover:bg-white/80 dark:hover:bg-white/10 active:translate-y-0.5 transition-all shadow-sm"
-              >
-                <Trophy className="w-4 h-4 mb-1 text-secondary" />
-                <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'leaderboards')}</span>
-              </Button>
-              <div className="bg-white/50 dark:bg-white/5 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/50 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-sm">
-                <Zap className="w-4 h-4 mb-1 text-primary" />
-                <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'quickReflex')}</span>
-              </div>
+            
+            <div className="bg-white/50 dark:bg-white/5 backdrop-blur-sm p-4 rounded-xl sm:rounded-2xl border border-white/50 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-sm">
+              <Zap className="w-4 h-4 mb-1 text-primary" />
+              <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'quickReflex')}</span>
             </div>
           </div>
         </div>
@@ -393,11 +286,6 @@ export default function GameContainer() {
                   className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
                   style={{ backgroundColor: level.target.hex }}
                 />
-                {feedback === 'CORRECT' && (
-                  <div className="absolute -top-1 -right-1 bg-green-500 text-white p-1 rounded-full shadow-lg z-20 animate-bounce">
-                    <Zap className="w-4 h-4 fill-current" />
-                  </div>
-                )}
               </div>
               
               <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
@@ -471,82 +359,6 @@ export default function GameContainer() {
           </div>
         </div>
       )}
-
-      {/* Leaderboard Modal */}
-      <Dialog open={isLeaderboardOpen} onOpenChange={setIsLeaderboardOpen}>
-        <DialogContent className="max-w-[90vw] sm:max-w-[400px] rounded-3xl border-none shadow-2xl p-0 overflow-hidden bg-background">
-          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
-          <DialogHeader className="p-6 pb-2 text-center">
-            <DialogTitle className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-foreground flex items-center justify-center gap-2">
-              <Trophy className="w-6 h-6 text-secondary" />
-              {t(lang, 'topPlayers')}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="p-4 sm:p-6 pt-2 space-y-2">
-            {isLoadingLeaderboard ? (
-              <div className="flex flex-col items-center justify-center py-12 gap-4">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t(lang, 'loading')}</span>
-              </div>
-            ) : leaderboardEntries.length > 0 ? (
-              <div className="space-y-2">
-                <div className="grid grid-cols-6 px-3 py-1 mb-1">
-                   <span className="col-span-1 text-[8px] font-black text-muted-foreground uppercase">{t(lang, 'rank')}</span>
-                   <span className="col-span-3 text-[8px] font-black text-muted-foreground uppercase">{t(lang, 'welcome').split(',')[0]}</span>
-                   <span className="col-span-2 text-[8px] font-black text-muted-foreground uppercase text-right">{t(lang, 'scoreLabel')}</span>
-                </div>
-                {leaderboardEntries.map((entry, idx) => {
-                  const playerInfo = getPlayerDisplayData(entry.player);
-                  return (
-                    <div 
-                      key={idx}
-                      className={`grid grid-cols-6 items-center p-3 rounded-2xl border transition-all ${idx === 0 ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-white/50 dark:bg-white/5 border-white/80 dark:border-white/10'}`}
-                    >
-                      <div className="col-span-1 flex items-center justify-center">
-                        <span className={`text-sm font-black w-6 h-6 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
-                          {entry.rank}
-                        </span>
-                      </div>
-                      <div className="col-span-3 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center overflow-hidden border border-secondary/20">
-                          {playerInfo.photo ? (
-                            <img src={playerInfo.photo} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <User className="w-4 h-4 text-secondary" />
-                          )}
-                        </div>
-                        <span className="text-[10px] sm:text-xs font-bold truncate text-foreground/90 uppercase tracking-tight">
-                          {playerInfo.name}
-                        </span>
-                      </div>
-                      <div className="col-span-2 text-right">
-                        <span className="text-sm sm:text-base font-black text-primary tabular-nums">
-                          {entry.score}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center opacity-50">
-                <Zap className="w-12 h-12 mb-2 text-muted-foreground" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t(lang, 'noData')}</span>
-              </div>
-            )}
-          </div>
-          
-          <div className="p-4 bg-muted/30 border-t border-white/20 dark:border-white/10">
-            <Button 
-              className="w-full h-12 rounded-2xl font-black uppercase tracking-widest text-[10px]"
-              onClick={() => setIsLeaderboardOpen(false)}
-            >
-              {t(lang, 'mainMenu')}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

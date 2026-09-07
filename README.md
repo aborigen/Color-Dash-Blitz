@@ -8,9 +8,8 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
 - **Dynamic Difficulty**: The game scales from 3 to 12 color choices with an accelerating timer.
 - **AI Color Facts**: Receive unique color theory facts after every game session.
 - **Immersive Audio**: Built-in audio synthesizer for platform-compliant sound effects.
-- **Yandex Games Integration**: Built-in support for Remote Config, full-screen ads, and global leaderboards.
 - **Responsive Design**: Optimized for a perfect "no-scroll" experience on all screens.
-- **Static Export**: Fully compatible with static hosting (Yandex Games, GitHub Pages).
+- **Static Export**: Fully compatible with static hosting (GitHub Pages, Vercel, etc.).
 
 ## 🛠 Tech Stack
 
@@ -19,7 +18,6 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components**: [ShadCN UI](https://ui.shadcn.com/)
 - **Audio**: Web Audio API (Internal Synthesizer)
-- **Platform**: Yandex Games SDK
 
 ## 🏁 Getting Started
 
@@ -38,41 +36,6 @@ Color Dash Blitz is a fast-paced, hyper-casual color matching game built for the
    npm run archive
    ```
    This will generate a date-stamped archive (e.g., `game-2024-05-26.zip`) in the root directory.
-
-## 📦 Publishing
-
-To publish your game to Yandex Games or other static hosts:
-
-1. Run `npm run archive`.
-2. Locate the generated `.zip` file (e.g., `game-YYYY-MM-DD.zip`) in your project root.
-3. Upload the file to the platform console.
-
-## 🔗 Connecting to GitHub
-
-To upload your code to GitHub:
-
-1. **Initialize Git**:
-   ```bash
-   git init
-   ```
-
-2. **Stage and Commit**:
-   ```bash
-   git add .
-   git commit -m "Initial release of Color Dash Blitz"
-   ```
-
-3. **Link to GitHub**:
-   Go to [GitHub](https://github.com/new) and create a new repository named `color-dash-blitz`. Then run:
-   ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/color-dash-blitz.git
-   ```
-
-4. **Push the Code**:
-   ```bash
-   git branch -M main
-   git push -u origin main
-   ```
 
 ## 📄 License
 
