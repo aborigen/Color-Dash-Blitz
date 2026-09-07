@@ -2,74 +2,27 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.8] - 2024-06-01
+
+### Added
+- **AI Integration**: Configured `GOOGLE_GENAI_API_KEY` in the environment to enable real-time color fact generation via Genkit.
+
 ## [0.3.7] - 2024-05-31
 
 ### Changed
-- **Environment Configuration**: Added `GOOGLE_GENAI_API_KEY` variable to the `.env` file to support AI-powered features via Genkit.
+- **Environment Configuration**: Added initial Gemini API key placeholder to support AI-powered features.
 
 ## [0.3.6] - 2024-05-30
 
 ### Fixed
-- **Leaderboard Crash**: Resolved `TypeError: s.getName is not a function` by implementing defensive player data extraction in the UI. The component now safely handles both SDK objects with methods and plain objects with properties for leaderboard entries.
+- **Leaderboard Crash**: Resolved `TypeError: s.getName is not a function` by implementing defensive player data extraction in the UI.
 
 ## [0.3.5] - 2024-05-29
 
 ### Added
-- **Dark Mode**: Implemented a comprehensive dark theme with HSL variable refinements and a persistent UI toggle (Sun/Moon icons).
-- **Smooth Transitions**: Added CSS transitions for background and text colors to ensure a professional feel during theme switching.
+- **Dark Mode**: Implemented a comprehensive dark theme with HSL variable refinements and a persistent UI toggle.
 
 ## [0.3.4] - 2024-05-28
 
 ### Fixed
-- **Yandex SDK Deprecation**: Completely removed the deprecated `ysdk.getLeaderboards()` method. The SDK bridge now exclusively uses the modern `ysdk.leaderboards` property, supporting both object and async function access patterns to ensure full compatibility with the latest Yandex Games standards.
-
-## [0.3.3] - 2024-05-27
-
-### Fixed
-- **Leaderboard API**: Implemented a robust `getLBManager` helper in the SDK bridge to resolve `API structure unexpected` errors. The bridge now gracefully handles different SDK versions and property/method structures for the `leaderboards` module.
-
-## [0.3.2] - 2024-05-26
-
-### Improved
-- **Build Workflow**: Updated `package.json` to automatically set executable permissions for `archive.sh` before building, ensuring smoother operations in Unix-like environments.
-
-## [0.3.1] - 2024-05-25
-
-### Fixed
-- **SDK Lifecycle**: Updated the readiness signal to use `sdk.features.LoadingAPI.ready()` for better compatibility with the latest Yandex Games platform standards.
-
-## [0.3.0] - 2024-05-24
-
-### Added
-- **Internal Audio Synthesizer**: Replaced all external MP3 dependencies with a custom Web Audio API `AudioSynth` to ensure 100% compatibility with static web platforms and reduce initial load size.
-- **Publishing Kit**: Added `PROMO.md` with localized English and Russian metadata (titles, descriptions, instructions) for Yandex Games Console.
-- **Git Integration**: Added `.gitignore` and updated `README.md` with comprehensive troubleshooting for GitHub connectivity.
-
-### Fixed
-- **Mobile UX**: Disabled contextual menus and long-touch callouts across all UI elements to prevent gameplay interruptions on touch devices.
-- **SDK Lifecycle**: Implemented `sdk.features.LoadingProgress.ready()` to correctly signal game readiness to the Yandex Games environment after assets and remote configs are loaded.
-- **Static Export**: Enabled `trailingSlash: true` in Next.js config to prevent 404 errors on refreshes in static hosting environments.
-
-### Improved
-- **Layout Robustness**: Refined the UI with `dvh` units and flexible flexbox containers to ensure 12-color grids and AI facts never cut off on compact or legacy smartphone screens.
-- **Interaction Quality**: Added `overscroll-behavior: none` to the body to prevent accidental "pull-to-refresh" gestures during intense tapping.
-
-## [0.2.0] - 2024-05-22
-
-### Added
-- **Difficulty Scaling**: Introduced 3 new levels of difficulty. The game now scales from 3 to 12 color choices with an accelerating timer based on the user's score.
-- **Yandex Games SDK Integration**:
-    - Full-screen ad support with smart frequency logic.
-    - Global leaderboard submission for high scores (ID: 'leaders').
-    - Remote Config support for toggling AI facts and adjusting game balance.
-
-### Improved
-- **Multilingual Support**: Enhanced English and Russian translations for all UI elements and color names.
-- **Visual Feedback**: Added bounce and shake animations for correct and wrong answers.
-
-## [0.1.0] - 2024-05-20
-
-### Added
-- Initial project structure with Next.js 15 and ShadCN UI.
-- Basic color matching gameplay loop.
-- AI-powered color facts using Genkit and Google Gemini.
+- **Yandex SDK Deprecation**: Completely removed the deprecated `ysdk.getLeaderboards()` method in favor of `ysdk.leaderboards`.
