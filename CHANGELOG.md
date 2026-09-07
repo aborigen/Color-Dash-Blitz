@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.4.0] - 2024-06-02
+
+### Changed
+- **Theme Refinement**: Updated dark mode HSL variables to a "Deep Space" palette for improved contrast and aesthetics.
+
 ## [0.3.8] - 2024-06-01
 
 ### Added

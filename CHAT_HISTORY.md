@@ -16,6 +16,7 @@ This document tracks the iterative development of **Color Dash Blitz**.
 ### 3. Dark Mode & UI Polishing
 - Added HSL variable support and a theme toggle.
 - Fixed leaderboard crashes with defensive data handling.
+- **Update**: Refined dark theme to "Deep Space" palette for better visual depth.
 
 ### 4. AI & Environment Configuration
 - **Task**: Enable AI-powered color facts.
