@@ -32,6 +32,7 @@ This document tracks the iterative development of **Color Dash Blitz**, document
 - **Outcome**: 
     - Created a Genkit flow for generating interesting facts about color theory.
     - Implemented a static fallback library (`src/lib/facts.ts`) for zero-dependency production builds.
+    - **Setup**: Configured the `.env` file with `GOOGLE_GENAI_API_KEY` for AI flow authentication.
 
 ### 6. UI/UX Refinements & Dark Mode
 - **Task**: Polish the arcade feel and add theme support.
@@ -64,3 +65,4 @@ This document tracks the iterative development of **Color Dash Blitz**, document
 - **Leaderboard ID**: `leaders` (Cumulative scoring).
 - **Language Mapping**: English (`en`), Russian (`ru`).
 - **Theme**: Light/Dark support via `.dark` CSS class.
+- **AI Auth**: Uses `GOOGLE_GENAI_API_KEY` in `.env`.

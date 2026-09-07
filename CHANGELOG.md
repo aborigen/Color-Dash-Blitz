@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.3.7] - 2024-05-31
+
+### Changed
+- **Environment Configuration**: Added `GOOGLE_GENAI_API_KEY` variable to the `.env` file to support AI-powered features via Genkit.
+
 ## [0.3.6] - 2024-05-30
 
 ### Fixed
