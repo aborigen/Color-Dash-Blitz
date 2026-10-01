@@ -46,3 +46,7 @@ This document tracks the iterative development of **Color Dash Blitz**.
 ### 9. Portrait Layout Optimization
 - **Task**: Refactor UI specifically for portrait orientation.
 - **Outcome**: Optimized vertical space, improved HUD clarity, and scaled gameplay elements for mobile ergonomics.
+
+### 10. Container & Overflow Refactoring
+- **Task**: Fix overlapping UI elements in portrait mode.
+- **Outcome**: Refactored `GameContainer` to handle vertical constraints more gracefully, ensuring all elements fit within the viewport on small mobile devices.

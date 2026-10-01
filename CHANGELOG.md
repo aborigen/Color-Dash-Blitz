@@ -2,6 +2,12 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.6.6] - 2024-06-07
+
+### Fixed
+- **UI Overflow**: Resolved overlapping issues in portrait mode by refactoring the `GameContainer` to use more defensive vertical spacing and responsive scaling for the target indicator.
+- **Mobile Ergonomics**: Scaled down primary gameplay assets slightly on mobile to prevent HUD encroachment during multi-color grid levels.
+
 ## [0.6.5] - 2024-06-06
 
 ### Changed
