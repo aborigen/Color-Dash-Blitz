@@ -50,3 +50,7 @@ This document tracks the iterative development of **Color Dash Blitz**.
 ### 10. Container & Overflow Refactoring
 - **Task**: Fix overlapping UI elements in portrait mode.
 - **Outcome**: Refactored `GameContainer` to handle vertical constraints more gracefully, ensuring all elements fit within the viewport on small mobile devices.
+
+### 11. Grid Layout Compression
+- **Task**: Reduce vertical footprint of the 2x2 (4-color) grid.
+- **Outcome**: Refactored `getGridClasses` to use a 1x4 layout for 4 choices, reclaiming significant vertical space in portrait orientation.

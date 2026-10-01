@@ -2,6 +2,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.6.7] - 2024-06-08
+
+### Changed
+- **Grid Refactoring**: Optimized the 4-color grid difficulty level to use a 1x4 horizontal layout instead of 2x2. This significantly reduces vertical space usage in portrait mode and prevents UI element overlapping on smaller screens.
+
 ## [0.6.6] - 2024-06-07
 
 ### Fixed

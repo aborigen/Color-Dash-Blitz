@@ -179,7 +179,7 @@ export default function GameContainer() {
 
   const getGridClasses = (count: number) => {
     if (count === 3) return 'grid-cols-3';
-    if (count === 4) return 'grid-cols-2';
+    if (count === 4) return 'grid-cols-4'; // Optimized for vertical space (1 row instead of 2x2)
     if (count === 6) return 'grid-cols-3';
     if (count === 8) return 'grid-cols-4';
     if (count === 9) return 'grid-cols-3';
