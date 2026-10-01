@@ -2,6 +2,13 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.6.0] - 2024-06-05
+
+### Changed
+- **UI Refinement**: Enhanced the visual aesthetics with polished typography, better spacing, and dynamic background elements.
+- **Enhanced Animations**: Added new streak/combo feedback, timer pulsing, and smoother transitions between game states.
+- **Premium Feel**: Integrated glassmorphism-style components with better shadow work and high-contrast styling for both light and dark modes.
+
 ## [0.5.0] - 2024-06-04
 
 ### Removed

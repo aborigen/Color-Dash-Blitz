@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, Moon, Sun } from 'lucide-react';
+import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, Moon, Sun, Flame } from 'lucide-react';
 import { t, tColor, Language } from '@/lib/i18n';
 import { getRandomFact } from '@/lib/facts';
 import { synth } from '@/lib/audio-synth';
@@ -47,6 +47,7 @@ const shuffle = <T,>(array: T[]): T[] => {
 export default function GameContainer() {
   const [gameState, setGameState] = useState<GameState>('START');
   const [score, setScore] = useState(0);
+  const [streak, setStreak] = useState(0);
   const [timer, setTimer] = useState(100);
   const [level, setLevel] = useState<LevelData | null>(null);
   const [fact, setFact] = useState<string | null>(null);
@@ -60,7 +61,6 @@ export default function GameContainer() {
   const initialTimerValue = 100;
 
   useEffect(() => {
-    // Detect system language
     if (typeof window !== 'undefined') {
       const browserLang = window.navigator.language.split('-')[0];
       if (browserLang === 'ru') setLang('ru');
@@ -111,6 +111,7 @@ export default function GameContainer() {
 
   const endGame = useCallback(async (finalScore: number) => {
     setGameState('GAMEOVER');
+    setStreak(0);
     playSound('gameover');
     
     if (enableFacts) {
@@ -130,8 +131,8 @@ export default function GameContainer() {
         }
       } else {
         const id = setInterval(() => {
-          const speedMultiplier = 1 + Math.min(1, score / 30);
-          setTimer((prev) => Math.max(0, prev - (2.5 * speedMultiplier)));
+          const speedMultiplier = 1 + Math.min(1.5, score / 40);
+          setTimer((prev) => Math.max(0, prev - (2.8 * speedMultiplier)));
         }, 100);
         return () => clearInterval(id);
       }
@@ -140,6 +141,7 @@ export default function GameContainer() {
 
   const startGame = useCallback(async () => {
     setScore(0);
+    setStreak(0);
     setFact(null);
     setFeedback(null);
     generateLevel(0);
@@ -152,19 +154,22 @@ export default function GameContainer() {
     
     if (color.hex === level.target.hex) {
       const nextScore = score + 1;
+      const nextStreak = streak + 1;
       setScore(nextScore);
+      setStreak(nextStreak);
       setFeedback('CORRECT');
       playSound('correct');
       setTimeout(() => setFeedback(null), 200);
       generateLevel(nextScore);
     } else {
       setFeedback('WRONG');
+      setStreak(0);
       playSound('wrong');
       setTimeout(() => setFeedback(null), 400);
-      const penalty = 15 + Math.min(15, Math.floor(score / 2));
+      const penalty = 20 + Math.min(20, Math.floor(score / 1.5));
       setTimer(t => Math.max(0, t - penalty));
     }
-  }, [level, generateLevel, score, playSound]);
+  }, [level, generateLevel, score, streak, playSound]);
 
   const toggleMute = () => setIsMuted(prev => !prev);
   const toggleDark = () => setIsDark(prev => !prev);
@@ -184,11 +189,13 @@ export default function GameContainer() {
 
   return (
     <div 
-      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none transition-colors duration-300"
+      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none transition-colors duration-500"
       onContextMenu={(e) => e.preventDefault()}
     >
-      <div className="absolute top-[-5%] left-[-5%] w-[30%] h-[30%] bg-primary/10 rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-3xl -z-10" />
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full bg-blur-dot opacity-[0.03] dark:opacity-[0.07] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px] -z-10 animate-pulse" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 rounded-full blur-[120px] -z-10 animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Global Controls */}
       <div className="absolute top-4 left-4 z-20 flex gap-2">
@@ -197,9 +204,9 @@ export default function GameContainer() {
             variant="ghost" 
             size="sm" 
             onClick={toggleLanguage} 
-            className="rounded-full bg-white/50 dark:bg-black/50 backdrop-blur hover:bg-white/80 dark:hover:bg-black/80 h-8 sm:h-9 px-2 sm:px-3 shadow-sm border border-white/20 dark:border-white/10 font-black text-[10px] flex gap-2 items-center"
+            className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-9 px-4 shadow-xl border border-white/20 dark:border-white/10 font-bold text-xs flex gap-2 items-center transition-all active:scale-95"
           >
-            <Languages className="w-3.5 h-3.5 text-secondary" />
+            <Languages className="w-4 h-4 text-secondary" />
             <span className="uppercase text-foreground">{lang}</span>
           </Button>
         )}
@@ -210,7 +217,7 @@ export default function GameContainer() {
           variant="ghost" 
           size="icon" 
           onClick={toggleDark} 
-          className="rounded-full bg-white/50 dark:bg-black/50 backdrop-blur hover:bg-white/80 dark:hover:bg-black/80 h-8 w-8 sm:h-9 sm:w-9 shadow-sm border border-white/20 dark:border-white/10"
+          className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-9 w-9 shadow-xl border border-white/20 dark:border-white/10 transition-all active:scale-95"
         >
           {isDark ? <Sun className="w-4 h-4 text-yellow-500" /> : <Moon className="w-4 h-4 text-slate-700" />}
         </Button>
@@ -218,89 +225,106 @@ export default function GameContainer() {
           variant="ghost" 
           size="icon" 
           onClick={toggleMute} 
-          className="rounded-full bg-white/50 dark:bg-black/50 backdrop-blur hover:bg-white/80 dark:hover:bg-black/80 h-8 w-8 sm:h-9 sm:w-9 shadow-sm border border-white/20 dark:border-white/10"
+          className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-9 w-9 shadow-xl border border-white/20 dark:border-white/10 transition-all active:scale-95"
         >
           {isMuted ? <VolumeX className="w-4 h-4 text-muted-foreground" /> : <Volume2 className="w-4 h-4 text-primary" />}
         </Button>
       </div>
 
       {gameState === 'START' && (
-        <div className="flex flex-col landscape:flex-row items-center justify-center flex-1 w-full gap-4 sm:gap-8 landscape:gap-12 animate-in fade-in zoom-in duration-500 overflow-hidden">
-          <div className="relative inline-block text-center scale-[0.8] sm:scale-100 transition-transform">
-             <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-[1.5rem] sm:rounded-[2rem] blur-xl opacity-20"></div>
-             <div className="relative bg-white/80 dark:bg-black/40 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl border border-white/50 dark:border-white/10">
-               <div className="w-10 h-10 sm:w-16 sm:h-16 bg-primary/10 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 animate-bounce">
-                 <Zap className="w-6 h-6 sm:w-10 sm:h-10 text-primary fill-current" />
+        <div className="flex flex-col landscape:flex-row items-center justify-center flex-1 w-full gap-6 sm:gap-10 landscape:gap-16 animate-in fade-in zoom-in-95 duration-700">
+          <div className="relative inline-block text-center transition-transform hover:scale-105 duration-300">
+             <div className="absolute -inset-6 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-[3rem] blur-2xl opacity-40 animate-pulse"></div>
+             <div className="relative bg-white/70 dark:bg-white/5 backdrop-blur-xl p-8 sm:p-12 rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-white/40 dark:border-white/10">
+               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-bounce">
+                 <Zap className="w-8 h-8 sm:w-12 sm:h-12 text-primary fill-current" />
                </div>
-               <h1 className="text-2xl sm:text-4xl font-black text-foreground mb-1 tracking-tight leading-none uppercase">
+               <h1 className="text-4xl sm:text-6xl font-black text-foreground mb-2 tracking-tighter leading-none uppercase">
                  {t(lang, 'title')}<br /><span className="text-secondary">{t(lang, 'titleSuffix')}</span>
                </h1>
-               <p className="text-[8px] sm:text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1 sm:mt-2">{t(lang, 'subtitle')}</p>
+               <div className="h-1 w-12 bg-primary/30 mx-auto my-4 rounded-full" />
+               <p className="text-[10px] sm:text-xs text-muted-foreground font-black uppercase tracking-[0.3em]">{t(lang, 'subtitle')}</p>
              </div>
           </div>
           
-          <div className="w-full space-y-3 sm:space-y-4 max-w-[280px]">
+          <div className="w-full space-y-4 max-w-[320px]">
             <Button 
               onClick={startGame} 
               size="lg" 
-              className="w-full h-14 sm:h-20 text-lg sm:text-2xl font-black bg-primary hover:bg-primary/90 text-white rounded-[1.2rem] sm:rounded-[1.5rem] shadow-[0_4px_0_rgb(220,38,38)] sm:shadow-[0_8px_0_rgb(220,38,38)] hover:translate-y-[1px] active:translate-y-[4px] transition-all flex flex-col gap-0 items-center justify-center"
+              className="w-full h-16 sm:h-24 text-xl sm:text-3xl font-black bg-primary hover:bg-primary/90 text-white rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_6px_0_rgb(185,28,28)] sm:shadow-[0_10px_0_rgb(185,28,28)] hover:translate-y-[2px] active:translate-y-[6px] active:shadow-none transition-all flex flex-col gap-0 items-center justify-center"
             >
               <span>{t(lang, 'playNow')}</span>
-              <span className="text-[8px] sm:text-[9px] font-bold opacity-70 tracking-widest">{t(lang, 'startBlitzing')}</span>
+              <span className="text-[10px] font-bold opacity-70 tracking-[0.2em]">{t(lang, 'startBlitzing')}</span>
             </Button>
             
-            <div className="bg-white/50 dark:bg-white/5 backdrop-blur-sm p-4 rounded-xl sm:rounded-2xl border border-white/50 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-sm">
-              <Zap className="w-4 h-4 mb-1 text-primary" />
-              <span className="text-[8px] uppercase font-black text-muted-foreground">{t(lang, 'quickReflex')}</span>
+            <div className="bg-white/40 dark:bg-white/5 backdrop-blur-md py-4 px-6 rounded-2xl border border-white/40 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-lg">
+              <Zap className="w-5 h-5 mb-1 text-primary animate-pulse" />
+              <span className="text-[10px] uppercase font-black text-muted-foreground/80 tracking-widest">{t(lang, 'quickReflex')}</span>
             </div>
           </div>
         </div>
       )}
 
       {gameState === 'PLAYING' && level && (
-        <div className={`w-full h-full flex flex-col items-center justify-between py-2 sm:py-4 overflow-hidden ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
-          <div className="w-full flex justify-between items-center px-1 shrink-0 pt-10 sm:pt-0 max-w-xl mx-auto">
-             <div className="bg-white/80 dark:bg-white/10 backdrop-blur px-2.5 py-1 rounded-full shadow-lg flex items-center gap-2 border border-primary/10">
-                <Trophy className="w-3.5 h-3.5 text-secondary" />
-                <span className="text-base font-black text-foreground tabular-nums">{score}</span>
+        <div className={`w-full h-full flex flex-col items-center justify-between py-2 sm:py-6 overflow-hidden transition-all duration-300 ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
+          <div className="w-full flex justify-between items-center px-2 shrink-0 pt-12 sm:pt-4 max-w-2xl mx-auto z-10">
+             <div className="flex flex-col items-start gap-1">
+               <div className="bg-white/70 dark:bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-2xl shadow-xl flex items-center gap-3 border border-primary/20">
+                  <Trophy className="w-4 h-4 text-secondary" />
+                  <span className="text-xl font-black text-foreground tabular-nums">{score}</span>
+               </div>
+               {streak > 2 && (
+                 <div className="flex items-center gap-1 px-2 animate-in slide-in-from-left-2 duration-300">
+                   <Flame className="w-3 h-3 text-orange-500 fill-current" />
+                   <span className="text-[10px] font-black text-orange-500 uppercase italic">Combo {streak}!</span>
+                 </div>
+               )}
              </div>
-             <div className="flex-1 max-w-[120px] sm:max-w-[150px] ml-4">
-                <div className="relative h-2.5 sm:h-3 w-full bg-white/50 dark:bg-white/5 rounded-full border border-white dark:border-white/10 overflow-hidden shadow-inner">
+             
+             <div className="flex-1 max-w-[160px] sm:max-w-[200px] ml-6">
+                <div className={`relative h-4 w-full bg-white/40 dark:bg-white/5 rounded-full border-2 border-white/60 dark:border-white/10 overflow-hidden shadow-inner ${timer < 25 ? 'timer-pulse ring-2 ring-destructive/50' : ''}`}>
                   <div 
-                    className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-100 ease-linear"
-                    style={{ width: `${timer}%` }}
+                    className={`h-full transition-all duration-100 ease-linear ${timer < 25 ? 'bg-destructive' : 'bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_100%] animate-gradient-x'}`}
+                    style={{ 
+                      width: `${timer}%`,
+                      backgroundImage: timer < 25 ? 'none' : undefined
+                    }}
                   />
                 </div>
              </div>
           </div>
 
-          <div className="flex-1 w-full flex flex-col landscape:flex-row items-center justify-center gap-2 sm:gap-6 landscape:gap-12 min-h-0 py-2">
-            <div className="flex flex-col items-center justify-center space-y-1 sm:space-y-4 min-h-0 landscape:flex-1">
+          <div className="flex-1 w-full flex flex-col landscape:flex-row items-center justify-center gap-4 sm:gap-8 landscape:gap-16 min-h-0 py-4 relative">
+            <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-6 min-h-0 landscape:flex-1 animate-in zoom-in-90 duration-500">
               <div className="text-center shrink-0">
-                <h2 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{t(lang, 'matchThis')}</h2>
+                <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-muted-foreground mb-1">{t(lang, 'matchThis')}</h2>
+                <div className="h-0.5 w-8 bg-primary/20 mx-auto rounded-full" />
               </div>
               
-              <div className="relative flex items-center justify-center min-h-0 overflow-hidden py-1 sm:py-2">
-                <div className="absolute -inset-4 bg-white/40 dark:bg-white/5 blur-2xl rounded-full" />
+              <div className="relative flex items-center justify-center min-h-0 group">
+                <div className="absolute -inset-8 bg-white/50 dark:bg-white/5 blur-3xl rounded-full scale-125 transition-transform group-hover:scale-150" />
                 <div 
-                  className={`w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.2rem] sm:rounded-[2.5rem] shadow-[0_8px_20px_-10px_rgba(0,0,0,0.3)] transition-all duration-200 border-4 sm:border-8 border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : ''}`}
+                  className={`w-20 h-20 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-[2rem] sm:rounded-[3.5rem] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] transition-all duration-300 border-[6px] sm:border-[12px] border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : 'hover:scale-105'}`}
                   style={{ backgroundColor: level.target.hex }}
                 />
               </div>
               
-              <p className="text-[10px] sm:text-base font-black text-foreground/80 uppercase tracking-[0.2em] shrink-0">{tColor(lang, level.target.name)}</p>
+              <div className="bg-white/40 dark:bg-white/5 backdrop-blur-sm px-4 py-1 rounded-full border border-white/40 dark:border-white/10 shrink-0">
+                <p className="text-xs sm:text-lg font-black text-foreground uppercase tracking-[0.3em]">{tColor(lang, level.target.name)}</p>
+              </div>
             </div>
 
-            <div className="w-full max-w-[340px] sm:max-w-[440px] landscape:max-w-[400px] px-2 sm:px-4 pb-2 sm:pb-8 shrink-0 flex items-center justify-center">
-              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-2 sm:gap-3 w-full`}>
+            <div className="w-full max-w-[360px] sm:max-w-[500px] landscape:max-w-[440px] px-4 pb-4 sm:pb-12 shrink-0 flex items-center justify-center">
+              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-3 sm:gap-4 w-full animate-in slide-in-from-bottom-4 duration-500`}>
                 {level.choices.map((choice, i) => (
                   <button
                     key={`${choice.name}-${i}`}
                     onClick={() => handleChoice(choice)}
-                    className="aspect-square rounded-lg sm:rounded-xl shadow-[0_2px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-0.5 active:shadow-none relative overflow-hidden border-2 sm:border-4 border-white/80 dark:border-white/10"
+                    className="aspect-square rounded-2xl sm:rounded-3xl shadow-[0_4px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-1 active:shadow-none relative overflow-hidden border-[3px] sm:border-[6px] border-white/90 dark:border-white/10 hover:brightness-110 group"
                     style={{ backgroundColor: choice.hex }}
                   >
-                    <div className="absolute inset-0 bg-white opacity-0 active:opacity-20 transition-opacity" />
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 group-active:opacity-30 transition-opacity" />
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white/20 rounded-full blur-md group-hover:scale-150 transition-transform" />
                   </button>
                 ))}
               </div>
@@ -310,48 +334,50 @@ export default function GameContainer() {
       )}
 
       {gameState === 'GAMEOVER' && (
-        <div className="flex flex-col landscape:flex-row items-center justify-center h-full w-full gap-4 sm:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-500 py-2 sm:py-4 overflow-hidden pt-12 sm:pt-0 max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-black/40 p-3 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full max-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
-            <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-primary/5 rounded-full -mr-8 -mt-8 sm:-mr-12 sm:-mt-12" />
-            <h2 className="text-sm sm:text-2xl font-black text-foreground mb-1 sm:mb-4 uppercase tracking-tight">{t(lang, 'blitzOver')}</h2>
-            <div className="text-4xl sm:text-7xl font-black text-primary mb-1 tracking-tighter tabular-nums leading-none">{score}</div>
-            <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">{t(lang, 'finalScore')}</p>
+        <div className="flex flex-col landscape:flex-row items-center justify-center h-full w-full gap-6 sm:gap-12 animate-in fade-in slide-in-from-bottom-12 duration-700 py-4 pt-16 sm:pt-0 max-w-5xl mx-auto">
+          <div className="bg-white/80 dark:bg-white/5 backdrop-blur-xl p-6 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] shadow-2xl border-t-8 border-primary w-full max-w-sm text-center relative overflow-hidden shrink-0 landscape:flex-1">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 blur-3xl" />
+            <h2 className="text-lg sm:text-3xl font-black text-foreground mb-2 sm:mb-6 uppercase tracking-tighter">{t(lang, 'blitzOver')}</h2>
+            <div className="text-6xl sm:text-9xl font-black text-primary mb-2 tracking-tighter tabular-nums leading-none drop-shadow-sm">{score}</div>
+            <div className="h-1 w-16 bg-muted mx-auto mb-4 rounded-full" />
+            <p className="text-[10px] sm:text-xs text-muted-foreground font-black uppercase tracking-[0.4em]">{t(lang, 'finalScore')}</p>
           </div>
 
-          <div className="w-full max-sm space-y-3 sm:space-y-4 flex flex-col flex-1 min-h-0 justify-between overflow-hidden landscape:flex-1">
+          <div className="w-full max-w-sm space-y-4 sm:space-y-6 flex flex-col flex-1 min-h-0 justify-between overflow-hidden landscape:flex-1">
             {enableFacts && fact && (
-              <div className="bg-white/80 dark:bg-white/5 backdrop-blur-sm p-3 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-secondary/20 relative w-full shadow-sm overflow-y-auto no-scrollbar flex-1 min-h-[60px] max-h-[30dvh] landscape:max-h-[50dvh]">
-                <div className="absolute top-1.5 left-3 bg-secondary text-white px-2 py-0.5 rounded-full text-[8px] font-black tracking-widest flex items-center gap-1 shadow-md z-10">
-                  <Info className="w-2.5 h-2.5" />
+              <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md p-5 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border-2 border-secondary/20 relative w-full shadow-2xl overflow-y-auto no-scrollbar flex-1 min-h-[80px] max-h-[35dvh] landscape:max-h-[55dvh] animate-in zoom-in-95 duration-500 delay-200">
+                <div className="absolute top-3 left-4 bg-secondary text-white px-3 py-1 rounded-full text-[9px] font-black tracking-[0.2em] flex items-center gap-2 shadow-lg z-10">
+                  <Info className="w-3 h-3" />
                   {t(lang, 'colorFact')}
                 </div>
-                <p className="text-[10px] sm:text-sm font-medium text-foreground/80 leading-relaxed text-center pt-5 sm:pt-8">
-                  {fact}
+                <p className="text-xs sm:text-base font-medium text-foreground/90 leading-relaxed text-center pt-8 sm:pt-10 italic">
+                  "{fact}"
                 </p>
               </div>
             )}
 
             {enableFacts && loadingFact && (
-              <div className="animate-pulse flex flex-col items-center justify-center space-y-2 w-full py-2 flex-1">
-                <div className="h-1.5 bg-muted-foreground/20 rounded-full w-3/4" />
-                <div className="h-1.5 bg-muted-foreground/20 rounded-full w-1/2" />
+              <div className="animate-pulse flex flex-col items-center justify-center space-y-3 w-full py-4 flex-1">
+                <div className="h-2 bg-muted rounded-full w-3/4" />
+                <div className="h-2 bg-muted rounded-full w-1/2" />
+                <div className="h-2 bg-muted rounded-full w-2/3" />
               </div>
             )}
 
-            <div className="flex flex-col gap-2 sm:gap-3 w-full shrink-0 pt-2 pb-6 sm:pb-0">
+            <div className="flex flex-col gap-3 sm:gap-4 w-full shrink-0 pt-4 pb-8 sm:pb-0">
               <Button 
                 onClick={startGame} 
                 size="lg" 
-                className="h-12 sm:h-16 text-base sm:text-xl font-black bg-primary hover:bg-primary/90 rounded-[1rem] sm:rounded-2xl shadow-[0_3px_0_rgb(220,38,38)] sm:shadow-[0_6px_0_rgb(220,38,38)] active:translate-y-1 active:shadow-none transition-all w-full"
+                className="h-16 sm:h-20 text-lg sm:text-2xl font-black bg-primary hover:bg-primary/90 rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_6px_0_rgb(185,28,28)] sm:shadow-[0_8px_0_rgb(185,28,28)] active:translate-y-1 active:shadow-none transition-all w-full"
               >
-                <RotateCcw className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+                <RotateCcw className="w-5 h-5 sm:w-7 sm:h-7 mr-3" />
                 {t(lang, 'retryBlitz')}
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => setGameState('START')} 
                 size="lg" 
-                className="h-10 sm:h-14 text-[9px] sm:text-xs font-black border-2 border-muted dark:border-white/10 rounded-[1rem] sm:rounded-2xl text-muted-foreground hover:bg-muted dark:hover:bg-white/5 transition-all w-full uppercase tracking-widest"
+                className="h-12 sm:h-16 text-[10px] sm:text-sm font-black border-2 border-muted dark:border-white/10 rounded-[1.5rem] sm:rounded-[2rem] text-muted-foreground hover:bg-muted dark:hover:bg-white/5 transition-all w-full uppercase tracking-[0.25em]"
               >
                 {t(lang, 'mainMenu')}
               </Button>
@@ -362,3 +388,4 @@ export default function GameContainer() {
     </div>
   );
 }
+
