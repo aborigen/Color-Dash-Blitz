@@ -2,6 +2,13 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.6.5] - 2024-06-06
+
+### Changed
+- **Portrait UI Refactor**: Optimized vertical space distribution for portrait orientation on mobile devices.
+- **Enhanced Mobile Ergonomics**: Scaled gameplay elements (target indicator, choices grid) for better reachability and visual clarity.
+- **Improved HUD**: Refined score and timer positioning to prevent overlap and improve readability during fast gameplay.
+
 ## [0.6.0] - 2024-06-05
 
 ### Changed
@@ -18,18 +25,3 @@ All notable changes to the Color Dash Blitz project will be documented in this f
 ### Changed
 - **Standalone Mode**: The game is now a fully standalone static web application.
 - **Refined Build**: Updated `archive.sh` to focus on generic static web deployment.
-
-## [0.4.1] - 2024-06-03
-
-### Changed
-- **Mobile Grid Optimization**: Refined the game choice grid to be more adaptable to small screens, improving column distribution and button scaling.
-
-## [0.4.0] - 2024-06-02
-
-### Changed
-- **Theme Refinement**: Updated dark mode HSL variables to a "Deep Space" palette for improved contrast and aesthetics.
-
-## [0.3.8] - 2024-06-01
-
-### Added
-- **AI Integration**: Configured `GOOGLE_GENAI_API_KEY` in the environment to enable real-time color fact generation via Genkit.
