@@ -20,9 +20,6 @@ As the player's `score` increases, the number of choices grows to challenge thei
 - **20-29 Points**: 9 choices (3x3 grid)
 - **30+ Points**: 12 choices (3x4 grid)
 
-### Shuffling
-We use a **Fisher-Yates shuffle** to ensure that the target color is placed randomly within the grid every time, preventing players from memorizing positions.
-
 ## ⏱ 3. The Blitz Timer
 The timer logic is handled inside a `useEffect` hook:
 - **Interval**: Updates every 100ms.

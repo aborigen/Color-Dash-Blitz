@@ -1,7 +1,5 @@
 # Color Dash Blitz - Development Chat History 📜
 
-... [existing entries] ...
-
 ### 13. Mobile UI Refinement
 - **Task**: Enhance responsiveness for small mobile screens.
 - **Outcome**:
@@ -15,3 +13,10 @@
     - Implemented `landscape:flex-row` side-by-side gameplay layout.
     - Repositioned Target Matcher and Grid for better horizontal ergonomics.
     - Tuned scaling and spacing to maintain "no-scroll" integrity on short screens.
+
+### 15. SDK Removal & Standalone Optimization
+- **Task**: Remove all external SDK dependencies to create a standalone web game.
+- **Outcome**:
+    - Removed Yandex Games SDK bridge and integration.
+    - Optimized all documentation to reflect the standalone nature of the app.
+    - Ensured 100% local asset usage for offline-capable hosting.

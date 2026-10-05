@@ -2,7 +2,8 @@
  * @fileOverview A Genkit flow for generating a fun, AI-powered fact about colors or color theory.
  * 
  * NOTE: This flow is intended for development and local fact generation.
- * For static production builds (e.g., Yandex Games), the game uses the local facts library.
+ * For static production builds, the game uses the local facts library to ensure 
+ * zero runtime server dependency.
  *
  * - aiCreatedColorFact - A function that generates a color fact.
  * - AiCreatedColorFactInput - The input type for the aiCreatedColorFact function.
