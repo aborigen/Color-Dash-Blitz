@@ -2,6 +2,13 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
+## [0.7.5] - 2024-06-10
+
+### Changed
+- **UI Responsiveness**: Refined vertical spacing and component scaling for improved playability on small mobile devices (e.g., iPhone SE).
+- **Target Indicator**: Optimized sizing of the target color hub to prevent overlap on compact screens.
+- **HUD Polish**: Reduced padding and adjusted element sizing in the Blitz Bar and score indicator for mobile viewports.
+
 ## [0.7.0] - 2024-06-09
 
 ### Changed

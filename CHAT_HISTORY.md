@@ -2,13 +2,16 @@
 
 ... [existing entries] ...
 
-### 11. Grid Layout Compression
-- **Task**: Reduce vertical footprint of the 2x2 (4-color) grid.
-- **Outcome**: Refactored `getGridClasses` to use a 1x4 layout for 4 choices, reclaiming significant vertical space in portrait orientation.
-
 ### 12. External Resource Sanitization
 - **Task**: Remove all links and references to external resources.
 - **Outcome**:
     - Scrubbed Google Fonts from `layout.tsx`.
     - Updated `tailwind.config.ts` with a system-first font stack.
     - Removed `remotePatterns` from `next.config.ts`.
+
+### 13. Mobile UI Refinement
+- **Task**: Enhance responsiveness for small mobile screens.
+- **Outcome**:
+    - Optimized target indicator scaling (`w-20` on smallest screens).
+    - Reduced global padding and gaps in `GameContainer`.
+    - Improved layout durability on low-height viewports to prevent UI overlap.

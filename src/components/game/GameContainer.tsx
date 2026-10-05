@@ -179,7 +179,7 @@ export default function GameContainer() {
 
   const getGridClasses = (count: number) => {
     if (count === 3) return 'grid-cols-3';
-    if (count === 4) return 'grid-cols-4'; // Optimized for vertical space (1 row instead of 2x2)
+    if (count === 4) return 'grid-cols-4';
     if (count === 6) return 'grid-cols-3';
     if (count === 8) return 'grid-cols-4';
     if (count === 9) return 'grid-cols-3';
@@ -189,7 +189,7 @@ export default function GameContainer() {
 
   return (
     <div 
-      className="flex flex-col items-center justify-between h-[100dvh] w-full p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none transition-colors duration-500"
+      className="flex flex-col items-center justify-between h-[100dvh] w-full p-3 sm:p-4 max-w-4xl mx-auto relative overflow-hidden bg-background select-none touch-none transition-colors duration-500"
       onContextMenu={(e) => e.preventDefault()}
     >
       {/* Dynamic Background Elements */}
@@ -198,68 +198,68 @@ export default function GameContainer() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 rounded-full blur-[120px] -z-10 animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Global Controls */}
-      <div className="absolute top-4 left-4 z-20 flex gap-2">
+      <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20 flex gap-2">
         {gameState === 'START' && (
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={toggleLanguage} 
-            className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-9 px-4 shadow-xl border border-white/20 dark:border-white/10 font-bold text-xs flex gap-2 items-center transition-all active:scale-95"
+            className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-8 sm:h-9 px-3 sm:px-4 shadow-xl border border-white/20 dark:border-white/10 font-bold text-[10px] sm:text-xs flex gap-2 items-center transition-all active:scale-95"
           >
-            <Languages className="w-4 h-4 text-secondary" />
+            <Languages className="w-3 h-3 sm:w-4 sm:h-4 text-secondary" />
             <span className="uppercase text-foreground">{lang}</span>
           </Button>
         )}
       </div>
 
-      <div className="absolute top-4 right-4 z-20 flex gap-2">
+      <div className="absolute top-3 sm:top-4 right-3 sm:top-4 z-20 flex gap-2">
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={toggleDark} 
-          className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-9 w-9 shadow-xl border border-white/20 dark:border-white/10 transition-all active:scale-95"
+          className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-8 w-8 sm:h-9 sm:w-9 shadow-xl border border-white/20 dark:border-white/10 transition-all active:scale-95"
         >
-          {isDark ? <Sun className="w-4 h-4 text-yellow-500" /> : <Moon className="w-4 h-4 text-slate-700" />}
+          {isDark ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700" />}
         </Button>
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={toggleMute} 
-          className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-9 w-9 shadow-xl border border-white/20 dark:border-white/10 transition-all active:scale-95"
+          className="rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md hover:bg-white/80 dark:hover:bg-black/60 h-8 w-8 sm:h-9 sm:w-9 shadow-xl border border-white/20 dark:border-white/10 transition-all active:scale-95"
         >
-          {isMuted ? <VolumeX className="w-4 h-4 text-muted-foreground" /> : <Volume2 className="w-4 h-4 text-primary" />}
+          {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />}
         </Button>
       </div>
 
       {gameState === 'START' && (
-        <div className="flex flex-col items-center justify-center flex-1 w-full gap-6 sm:gap-12 animate-in fade-in zoom-in-95 duration-700 px-4">
+        <div className="flex flex-col items-center justify-center flex-1 w-full gap-4 sm:gap-12 animate-in fade-in zoom-in-95 duration-700 px-4">
           <div className="relative inline-block text-center transition-transform hover:scale-105 duration-300 w-full max-w-sm">
-             <div className="absolute -inset-6 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-[3rem] blur-2xl opacity-40 animate-pulse"></div>
-             <div className="relative bg-white/70 dark:bg-white/5 backdrop-blur-xl p-6 sm:p-12 rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-white/40 dark:border-white/10">
-               <div className="w-12 h-12 sm:w-20 sm:h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 animate-bounce">
-                 <Zap className="w-6 h-6 sm:w-12 sm:h-12 text-primary fill-current" />
+             <div className="absolute -inset-4 sm:-inset-6 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-[2rem] sm:rounded-[3rem] blur-xl sm:blur-2xl opacity-40 animate-pulse"></div>
+             <div className="relative bg-white/70 dark:bg-white/5 backdrop-blur-xl p-6 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-white/40 dark:border-white/10">
+               <div className="w-10 h-10 sm:w-20 sm:h-20 bg-primary/10 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-6 animate-bounce">
+                 <Zap className="w-5 h-5 sm:w-12 sm:h-12 text-primary fill-current" />
                </div>
-               <h1 className="text-3xl sm:text-6xl font-black text-foreground mb-1 sm:mb-2 tracking-tighter leading-none uppercase">
+               <h1 className="text-2xl sm:text-6xl font-black text-foreground mb-1 tracking-tighter leading-none uppercase">
                  {t(lang, 'title')}<br /><span className="text-secondary">{t(lang, 'titleSuffix')}</span>
                </h1>
-               <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-primary/30 mx-auto my-2 sm:my-4 rounded-full" />
-               <p className="text-[9px] sm:text-xs text-muted-foreground font-black uppercase tracking-[0.25em]">{t(lang, 'subtitle')}</p>
+               <div className="h-0.5 sm:h-1 w-6 sm:w-12 bg-primary/30 mx-auto my-2 sm:my-4 rounded-full" />
+               <p className="text-[8px] sm:text-xs text-muted-foreground font-black uppercase tracking-[0.2em] sm:tracking-[0.25em]">{t(lang, 'subtitle')}</p>
              </div>
           </div>
           
-          <div className="w-full space-y-3 sm:space-y-4 max-w-[320px]">
+          <div className="w-full space-y-3 max-w-[280px] sm:max-w-[320px]">
             <Button 
               onClick={startGame} 
               size="lg" 
-              className="w-full h-16 sm:h-24 text-lg sm:text-3xl font-black bg-primary hover:bg-primary/90 text-white rounded-[1.2rem] sm:rounded-[2rem] shadow-[0_4px_0_rgb(185,28,28)] sm:shadow-[0_10px_0_rgb(185,28,28)] hover:translate-y-[2px] active:translate-y-[4px] sm:active:translate-y-[6px] active:shadow-none transition-all flex flex-col gap-0 items-center justify-center"
+              className="w-full h-14 sm:h-24 text-base sm:text-3xl font-black bg-primary hover:bg-primary/90 text-white rounded-[1rem] sm:rounded-[2rem] shadow-[0_4px_0_rgb(185,28,28)] sm:shadow-[0_10px_0_rgb(185,28,28)] hover:translate-y-[1px] active:translate-y-[3px] sm:active:translate-y-[6px] active:shadow-none transition-all flex flex-col gap-0 items-center justify-center"
             >
               <span>{t(lang, 'playNow')}</span>
-              <span className="text-[9px] font-bold opacity-70 tracking-[0.2em]">{t(lang, 'startBlitzing')}</span>
+              <span className="text-[8px] sm:text-[9px] font-bold opacity-70 tracking-[0.2em]">{t(lang, 'startBlitzing')}</span>
             </Button>
             
-            <div className="bg-white/40 dark:bg-white/5 backdrop-blur-md py-3 sm:py-4 px-6 rounded-2xl border border-white/40 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-lg">
-              <Zap className="w-4 h-4 mb-1 text-primary animate-pulse" />
-              <span className="text-[9px] uppercase font-black text-muted-foreground/80 tracking-widest">{t(lang, 'quickReflex')}</span>
+            <div className="bg-white/40 dark:bg-white/5 backdrop-blur-md py-2 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl border border-white/40 dark:border-white/10 flex flex-col items-center justify-center text-center shadow-lg">
+              <Zap className="w-3.5 h-3.5 mb-0.5 text-primary animate-pulse" />
+              <span className="text-[8px] sm:text-[9px] uppercase font-black text-muted-foreground/80 tracking-widest">{t(lang, 'quickReflex')}</span>
             </div>
           </div>
         </div>
@@ -268,22 +268,22 @@ export default function GameContainer() {
       {gameState === 'PLAYING' && level && (
         <div className={`w-full h-full flex flex-col items-center justify-between transition-all duration-300 ${feedback === 'WRONG' ? 'game-shake' : ''}`}>
           {/* HUD Area */}
-          <div className="w-full flex justify-between items-center px-4 shrink-0 pt-16 sm:pt-6 max-w-2xl mx-auto z-10 gap-4">
+          <div className="w-full flex justify-between items-center px-4 shrink-0 pt-12 sm:pt-6 max-w-2xl mx-auto z-10 gap-3 sm:gap-4">
              <div className="flex flex-col items-start gap-0.5">
-               <div className="bg-white/70 dark:bg-white/10 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl shadow-xl flex items-center gap-2 sm:gap-3 border border-primary/20">
-                  <Trophy className="w-3.5 h-3.5 sm:w-4 h-4 text-secondary" />
-                  <span className="text-lg sm:text-xl font-black text-foreground tabular-nums">{score}</span>
+               <div className="bg-white/70 dark:bg-white/10 backdrop-blur-md px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-2xl shadow-xl flex items-center gap-2 sm:gap-3 border border-primary/20">
+                  <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-secondary" />
+                  <span className="text-base sm:text-xl font-black text-foreground tabular-nums">{score}</span>
                </div>
                {streak > 2 && (
                  <div className="flex items-center gap-1 px-1 animate-in slide-in-from-left-2 duration-300">
-                   <Flame className="w-2.5 h-2.5 text-orange-500 fill-current" />
-                   <span className="text-[9px] font-black text-orange-500 uppercase italic">Combo {streak}!</span>
+                   <Flame className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-orange-500 fill-current" />
+                   <span className="text-[8px] sm:text-[9px] font-black text-orange-500 uppercase italic">x{streak}</span>
                  </div>
                )}
              </div>
              
-             <div className="flex-1 max-w-[200px]">
-                <div className={`relative h-4 sm:h-6 w-full bg-white/40 dark:bg-white/5 rounded-full border border-white/60 dark:border-white/10 overflow-hidden shadow-inner ${timer < 25 ? 'timer-pulse ring-1 ring-destructive/50' : ''}`}>
+             <div className="flex-1 max-w-[180px] sm:max-w-[200px]">
+                <div className={`relative h-3 sm:h-6 w-full bg-white/40 dark:bg-white/5 rounded-full border border-white/60 dark:border-white/10 overflow-hidden shadow-inner ${timer < 25 ? 'timer-pulse ring-1 ring-destructive/50' : ''}`}>
                   <div 
                     className={`h-full transition-all duration-100 ease-linear ${timer < 25 ? 'bg-destructive' : 'bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_100%] animate-gradient-x'}`}
                     style={{ 
@@ -296,35 +296,35 @@ export default function GameContainer() {
           </div>
 
           {/* Main Gameplay Area */}
-          <div className="flex-1 w-full flex flex-col items-center justify-center gap-4 sm:gap-8 min-h-0 py-2 sm:py-6 relative">
+          <div className="flex-1 w-full flex flex-col items-center justify-center gap-3 sm:gap-8 min-h-0 py-1 sm:py-6 relative overflow-hidden">
             {/* Target Color Section */}
-            <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-6 min-h-0 animate-in zoom-in-90 duration-500">
+            <div className="flex flex-col items-center justify-center space-y-2 sm:space-y-6 min-h-0 animate-in zoom-in-90 duration-500 shrink">
               <div className="text-center shrink-0">
-                <h2 className="text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-muted-foreground mb-1">{t(lang, 'matchThis')}</h2>
-                <div className="h-0.5 w-6 bg-primary/20 mx-auto rounded-full" />
+                <h2 className="text-[8px] sm:text-xs font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-muted-foreground mb-0.5">{t(lang, 'matchThis')}</h2>
+                <div className="h-0.5 w-4 sm:w-6 bg-primary/20 mx-auto rounded-full" />
               </div>
               
-              <div className="relative flex items-center justify-center min-h-0 group px-4">
-                <div className="absolute -inset-8 bg-white/50 dark:bg-white/5 blur-3xl rounded-full scale-110 transition-transform group-hover:scale-125" />
+              <div className="relative flex items-center justify-center min-h-0 group px-4 shrink">
+                <div className="absolute -inset-6 sm:-inset-8 bg-white/50 dark:bg-white/5 blur-2xl sm:blur-3xl rounded-full scale-110 transition-transform group-hover:scale-125" />
                 <div 
-                  className={`w-24 h-24 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-[2rem] sm:rounded-[3rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 border-[6px] sm:border-[12px] border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : 'hover:scale-105'}`}
+                  className={`w-20 h-20 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-[1.5rem] sm:rounded-[3rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 border-[4px] sm:border-[12px] border-white dark:border-white/20 relative z-10 ${feedback === 'CORRECT' ? 'scale-110 game-bounce' : 'hover:scale-105'}`}
                   style={{ backgroundColor: level.target.hex }}
                 />
               </div>
               
-              <div className="bg-white/40 dark:bg-white/5 backdrop-blur-sm px-4 py-1.5 sm:px-6 sm:py-2 rounded-full border border-white/40 dark:border-white/10 shrink-0 shadow-lg">
-                <p className="text-xs sm:text-xl font-black text-foreground uppercase tracking-[0.2em] sm:tracking-[0.3em]">{tColor(lang, level.target.name)}</p>
+              <div className="bg-white/40 dark:bg-white/5 backdrop-blur-sm px-3 py-1 sm:px-6 sm:py-2 rounded-full border border-white/40 dark:border-white/10 shrink-0 shadow-lg">
+                <p className="text-[10px] sm:text-xl font-black text-foreground uppercase tracking-[0.2em] sm:tracking-[0.3em]">{tColor(lang, level.target.name)}</p>
               </div>
             </div>
 
             {/* Choices Grid Section */}
-            <div className="w-full max-w-[360px] sm:max-w-[480px] px-6 pb-4 sm:pb-8 shrink-0">
-              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-3 sm:gap-5 w-full animate-in slide-in-from-bottom-6 duration-500`}>
+            <div className="w-full max-w-[340px] sm:max-w-[480px] px-6 pb-2 sm:pb-8 shrink-0">
+              <div key={level.id} className={`grid ${getGridClasses(level.choices.length)} gap-2 sm:gap-5 w-full animate-in slide-in-from-bottom-6 duration-500`}>
                 {level.choices.map((choice, i) => (
                   <button
                     key={`${choice.name}-${i}`}
                     onClick={() => handleChoice(choice)}
-                    className="aspect-square rounded-xl sm:rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-1 active:shadow-none relative overflow-hidden border-[3px] sm:border-[6px] border-white/95 dark:border-white/10 hover:brightness-110 group"
+                    className="aspect-square rounded-lg sm:rounded-2xl shadow-[0_3px_0_rgba(0,0,0,0.1)] transition-all active:translate-y-1 active:shadow-none relative overflow-hidden border-[2px] sm:border-[6px] border-white/95 dark:border-white/10 hover:brightness-110 group"
                     style={{ backgroundColor: choice.hex }}
                   >
                     <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 group-active:opacity-30 transition-opacity" />
@@ -337,42 +337,42 @@ export default function GameContainer() {
       )}
 
       {gameState === 'GAMEOVER' && (
-        <div className="flex flex-col items-center justify-center h-full w-full gap-6 sm:gap-10 animate-in fade-in slide-in-from-bottom-12 duration-700 py-4 pt-16 sm:pt-0 max-w-sm mx-auto">
-          <div className="bg-white/80 dark:bg-white/5 backdrop-blur-xl p-6 sm:p-10 rounded-[2.5rem] sm:rounded-[4rem] shadow-2xl border-t-6 sm:border-t-8 border-primary w-full text-center relative overflow-hidden shrink-0">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full -mr-12 -mt-12 blur-3xl" />
-            <h2 className="text-lg sm:text-3xl font-black text-foreground mb-3 uppercase tracking-tighter">{t(lang, 'blitzOver')}</h2>
-            <div className="text-6xl sm:text-9xl font-black text-primary mb-1 sm:mb-2 tracking-tighter tabular-nums leading-none drop-shadow-sm">{score}</div>
-            <div className="h-0.5 sm:h-1 w-12 sm:w-16 bg-muted mx-auto mb-4 sm:mb-6 rounded-full" />
-            <p className="text-[9px] sm:text-xs text-muted-foreground font-black uppercase tracking-[0.3em] sm:tracking-[0.4em]">{t(lang, 'finalScore')}</p>
+        <div className="flex flex-col items-center justify-center h-full w-full gap-4 sm:gap-10 animate-in fade-in slide-in-from-bottom-12 duration-700 py-3 pt-12 sm:pt-0 max-w-sm mx-auto overflow-y-auto no-scrollbar">
+          <div className="bg-white/80 dark:bg-white/5 backdrop-blur-xl p-6 sm:p-10 rounded-[2rem] sm:rounded-[4rem] shadow-2xl border-t-4 sm:border-t-8 border-primary w-full text-center relative overflow-hidden shrink-0">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-full -mr-8 -mt-8 blur-2xl" />
+            <h2 className="text-base sm:text-3xl font-black text-foreground mb-2 uppercase tracking-tighter">{t(lang, 'blitzOver')}</h2>
+            <div className="text-5xl sm:text-9xl font-black text-primary mb-1 tracking-tighter tabular-nums leading-none drop-shadow-sm">{score}</div>
+            <div className="h-0.5 w-10 bg-muted mx-auto mb-3 rounded-full" />
+            <p className="text-[8px] sm:text-xs text-muted-foreground font-black uppercase tracking-[0.25em] sm:tracking-[0.4em]">{t(lang, 'finalScore')}</p>
           </div>
 
-          <div className="w-full space-y-4 sm:space-y-6 flex flex-col flex-1 min-h-0 overflow-hidden">
+          <div className="w-full space-y-3 sm:space-y-6 flex flex-col flex-1 min-h-0">
             {enableFacts && fact && (
-              <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md p-5 sm:p-8 rounded-[2rem] sm:rounded-[3.5rem] border-2 border-secondary/20 relative w-full shadow-2xl overflow-y-auto no-scrollbar flex-1 min-h-[80px] animate-in zoom-in-95 duration-500 delay-200">
-                <div className="absolute top-3 left-5 bg-secondary text-white px-3 py-1 rounded-full text-[9px] font-black tracking-[0.2em] flex items-center gap-2 shadow-lg z-10">
-                  <Info className="w-3 h-3" />
+              <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[3.5rem] border-2 border-secondary/20 relative w-full shadow-2xl overflow-y-auto no-scrollbar flex-1 min-h-[60px] animate-in zoom-in-95 duration-500 delay-200">
+                <div className="absolute top-2.5 left-4 bg-secondary text-white px-2 py-0.5 rounded-full text-[8px] font-black tracking-[0.1em] flex items-center gap-1.5 shadow-lg z-10">
+                  <Info className="w-2.5 h-2.5" />
                   {t(lang, 'colorFact')}
                 </div>
-                <p className="text-xs sm:text-lg font-medium text-foreground/90 leading-relaxed text-center pt-8 sm:pt-10 italic">
+                <p className="text-[10px] sm:text-lg font-medium text-foreground/90 leading-relaxed text-center pt-6 sm:pt-10 italic">
                   "{fact}"
                 </p>
               </div>
             )}
 
-            <div className="flex flex-col gap-3 sm:gap-4 w-full shrink-0 pt-2 pb-8 sm:pb-12">
+            <div className="flex flex-col gap-2.5 sm:gap-4 w-full shrink-0 pt-2 pb-6 sm:pb-12">
               <Button 
                 onClick={startGame} 
                 size="lg" 
-                className="h-16 sm:h-24 text-lg sm:text-3xl font-black bg-primary hover:bg-primary/90 rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_5px_0_rgb(185,28,28)] sm:shadow-[0_8px_0_rgb(185,28,28)] active:translate-y-1 active:shadow-none transition-all w-full"
+                className="h-14 sm:h-24 text-base sm:text-3xl font-black bg-primary hover:bg-primary/90 rounded-[1.2rem] sm:rounded-[2rem] shadow-[0_4px_0_rgb(185,28,28)] sm:shadow-[0_8px_0_rgb(185,28,28)] active:translate-y-1 active:shadow-none transition-all w-full"
               >
-                <RotateCcw className="w-5 h-5 sm:w-8 sm:h-8 mr-3 sm:mr-4" />
+                <RotateCcw className="w-4 h-4 sm:w-8 sm:h-8 mr-2 sm:mr-4" />
                 {t(lang, 'retryBlitz')}
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => setGameState('START')} 
                 size="lg" 
-                className="h-12 sm:h-16 text-[9px] sm:text-sm font-black border-2 border-muted dark:border-white/10 rounded-[1.2rem] sm:rounded-[2rem] text-muted-foreground hover:bg-muted dark:hover:bg-white/5 transition-all w-full uppercase tracking-[0.2em] sm:tracking-[0.25em]"
+                className="h-10 sm:h-16 text-[8px] sm:text-sm font-black border-2 border-muted dark:border-white/10 rounded-[1rem] sm:rounded-[2rem] text-muted-foreground hover:bg-muted dark:hover:bg-white/5 transition-all w-full uppercase tracking-[0.2em] sm:tracking-[0.25em]"
               >
                 {t(lang, 'mainMenu')}
               </Button>
