@@ -1,56 +1,14 @@
 # Color Dash Blitz - Development Chat History 📜
 
-This document tracks the iterative development of **Color Dash Blitz**.
-
----
-
-## 🚀 Project Milestones
-
-### 1. Initial Setup & Gameplay Loop
-- Established Next.js 15 project with dynamic grid matching and difficulty scaling.
-
-### 2. Yandex Games SDK Integration
-- Implemented bridge with Ads, Remote Config, and Leaderboards.
-- **Fix**: Resolved `getLeaderboards()` deprecation and `API structure unexpected` errors.
-
-### 3. Dark Mode & UI Polishing
-- Added HSL variable support and a theme toggle.
-- Fixed leaderboard crashes with defensive data handling.
-- **Update**: Refined dark theme to "Deep Space" palette for better visual depth.
-
-### 4. AI & Environment Configuration
-- **Task**: Enable AI-powered color facts.
-- **Outcome**: 
-    - Configured Genkit with Google AI plugin.
-    - **Update**: Added `GOOGLE_GENAI_API_KEY` to `.env` for secure model access.
-
-### 5. Build & Publishing
-- Refactored `archive.sh` for date-stamped ZIP files and automatic permission setting.
-
-### 6. Mobile Experience Refinement
-- **Task**: Adapt game grid for small mobile screens.
-- **Outcome**: Optimized `getGridClasses` for better column distribution and adjusted UI scaling for compact devices.
-
-### 7. Standalone Transition
-- **Task**: Remove Yandex Games SDK implementation.
-- **Outcome**: Completely stripped Yandex SDK dependencies, scripts, and platform-specific features to make the game a standalone static web app.
-
-### 8. UI & Visual Feedback Refinement
-- **Task**: Make the game look and feel more premium.
-- **Outcome**: 
-    - Refined typography and spacing.
-    - Added streak/combo feedback system.
-    - Enhanced timer visuals with pulsing logic.
-    - Polished animations and background aesthetics.
-
-### 9. Portrait Layout Optimization
-- **Task**: Refactor UI specifically for portrait orientation.
-- **Outcome**: Optimized vertical space, improved HUD clarity, and scaled gameplay elements for mobile ergonomics.
-
-### 10. Container & Overflow Refactoring
-- **Task**: Fix overlapping UI elements in portrait mode.
-- **Outcome**: Refactored `GameContainer` to handle vertical constraints more gracefully, ensuring all elements fit within the viewport on small mobile devices.
+... [existing entries] ...
 
 ### 11. Grid Layout Compression
 - **Task**: Reduce vertical footprint of the 2x2 (4-color) grid.
 - **Outcome**: Refactored `getGridClasses` to use a 1x4 layout for 4 choices, reclaiming significant vertical space in portrait orientation.
+
+### 12. External Resource Sanitization
+- **Task**: Remove all links and references to external resources.
+- **Outcome**:
+    - Scrubbed Google Fonts from `layout.tsx`.
+    - Updated `tailwind.config.ts` with a system-first font stack.
+    - Removed `remotePatterns` from `next.config.ts`.
