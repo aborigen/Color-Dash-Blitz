@@ -12,9 +12,9 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "archive": "chmod +x archive.sh && ./archive.sh",
-    "build:sber": "npm run build && npm run archive -- sber",
-    "build:vk": "npm run build && npm run archive -- vk",
-    "build:yandex": "npm run build && npm run archive -- yandex"
+    "build:sber": "NEXT_PUBLIC_GAME_PLATFORM=SBER npm run build && npm run archive -- sber",
+    "build:vk": "NEXT_PUBLIC_GAME_PLATFORM=VK npm run build && npm run archive -- vk",
+    "build:yandex": "NEXT_PUBLIC_GAME_PLATFORM=YANDEX npm run build && npm run archive -- yandex"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "^1.28.0",

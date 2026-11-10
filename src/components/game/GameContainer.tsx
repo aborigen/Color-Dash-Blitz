@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -6,6 +7,7 @@ import { Trophy, RotateCcw, Info, Zap, Volume2, VolumeX, Languages, Moon, Sun, F
 import { t, tColor, Language } from '@/lib/i18n';
 import { getRandomFact } from '@/lib/facts';
 import { synth } from '@/lib/audio-synth';
+import { platformSDK } from '@/lib/platform-sdk';
 
 type GameState = 'START' | 'PLAYING' | 'GAMEOVER';
 
@@ -60,6 +62,11 @@ export default function GameContainer() {
   const enableFacts = true;
   const initialTimerValue = 100;
 
+  // Initialize Platform SDK
+  useEffect(() => {
+    platformSDK.init();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const browserLang = window.navigator.language.split('-')[0];
@@ -113,6 +120,9 @@ export default function GameContainer() {
     setGameState('GAMEOVER');
     setStreak(0);
     playSound('gameover');
+    
+    // Report score to platform
+    platformSDK.reportScore(finalScore);
     
     if (enableFacts) {
       setLoadingFact(true);
