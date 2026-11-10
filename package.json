@@ -1,3 +1,4 @@
+
 {
   "name": "color-dash-blitz",
   "version": "0.1.0",
@@ -10,7 +11,10 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "archive": "chmod +x archive.sh && ./archive.sh"
+    "archive": "chmod +x archive.sh && ./archive.sh",
+    "build:sber": "npm run build && npm run archive -- sber",
+    "build:vk": "npm run build && npm run archive -- vk",
+    "build:yandex": "npm run build && npm run archive -- yandex"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "^1.28.0",

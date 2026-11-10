@@ -1,17 +1,19 @@
+
 #!/bin/bash
 
 # Color Dash Blitz - Professional Build & Archive Script
-# Optimized for static web publishing.
+# Optimized for Sber, VK Games, and Yandex Games.
 
 # Exit on any error
 set -e
 
-# Generate filename with date
+PLATFORM=${1:-"generic"}
 DATE=$(date +%Y-%m-%d)
-ARCHIVE_NAME="game-$DATE.zip"
+ARCHIVE_NAME="dist-${PLATFORM}-${DATE}.zip"
 
 echo "------------------------------------------"
 echo "🚀 Starting Color Dash Blitz Build Process"
+echo "🌐 Platform: $PLATFORM"
 echo "📅 Date: $DATE"
 echo "------------------------------------------"
 
@@ -21,23 +23,19 @@ if ! command -v zip >/dev/null 2>&1; then
   exit 1
 fi
 
-if [ ! -d "node_modules" ]; then
-  echo "⚠️  node_modules not found. Installing dependencies..."
-  npm install
-fi
-
 # 1. Clean previous build artifacts
 echo "🧹 Cleaning previous build artifacts..."
 rm -rf out
-# Remove previous game zips to keep workspace clean
-rm -f game-*.zip
+# We don't remove existing zips to allow multiple platform builds in one session
 
-# 2. Build the project
-echo "🛠 Building project for production..."
-export NODE_ENV=production
-npm run build
+# 2. Build check
+if [ ! -d "out" ]; then
+  echo "⚠️ 'out' directory not found. Please run 'npm run build' first."
+  # If this script was called directly without npm run build, we run it
+  npm run build
+fi
 
-# 3. Post-build Cleanup
+# 3. Post-build Cleanup (Standard for most stores)
 if [ -d "out/404" ]; then
   echo "🧹 Removing 404/index.html artifact..."
   rm -rf out/404
@@ -48,6 +46,7 @@ if [ -d "out" ]; then
   echo "📦 Packaging $ARCHIVE_NAME..."
   
   # Enter the output directory to ensure a flat zip structure
+  # Platforms like Yandex and VK require index.html to be at the zip root
   cd out
   
   # Create the zip file containing all static files at the root
@@ -58,14 +57,13 @@ if [ -d "out" ]; then
   # Summary
   FILE_SIZE=$(du -h "$ARCHIVE_NAME" | cut -f1)
   echo "------------------------------------------"
-  echo "✅ SUCCESS: Build complete!"
+  echo "✅ SUCCESS: $PLATFORM build complete!"
   echo "📦 Archive: $ARCHIVE_NAME ($FILE_SIZE)"
-  echo "📍 Ready for static hosting deployment"
+  echo "📍 Ready for platform upload"
   echo "------------------------------------------"
 else
   echo "------------------------------------------"
   echo "❌ ERROR: Build failed. 'out' directory was not generated."
-  echo "Check the build logs above for more details."
   echo "------------------------------------------"
   exit 1
 fi

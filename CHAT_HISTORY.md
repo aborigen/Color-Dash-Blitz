@@ -1,22 +1,12 @@
+
 # Color Dash Blitz - Development Chat History 📜
 
-### 13. Mobile UI Refinement
-- **Task**: Enhance responsiveness for small mobile screens.
-- **Outcome**:
-    - Optimized target indicator scaling (`w-20` on smallest screens).
-    - Reduced global padding and gaps in `GameContainer`.
-    - Improved layout durability on low-height viewports to prevent UI overlap.
+... (previous entries)
 
-### 14. Landscape Orientation Refactor
-- **Task**: Optimize UI for landscape orientation on mobile devices.
+### 16. Multi-Platform Build Implementation
+- **Task**: Create build scripts for Sber, VK Games, and Yandex Games.
 - **Outcome**:
-    - Implemented `landscape:flex-row` side-by-side gameplay layout.
-    - Repositioned Target Matcher and Grid for better horizontal ergonomics.
-    - Tuned scaling and spacing to maintain "no-scroll" integrity on short screens.
-
-### 15. SDK Removal & Standalone Optimization
-- **Task**: Remove all external SDK dependencies to create a standalone web game.
-- **Outcome**:
-    - Removed Yandex Games SDK bridge and integration.
-    - Optimized all documentation to reflect the standalone nature of the app.
-    - Ensured 100% local asset usage for offline-capable hosting.
+    - Added `build:sber`, `build:vk`, and `build:yandex` to `package.json`.
+    - Enhanced `archive.sh` to support platform-specific naming and flat-zip structures.
+    - Created `PUBLISHING_GUIDE.md` to document the deployment process for various stores.
+    - Verified that `next.config.ts` settings (`assetPrefix`, `trailingSlash`) are optimal for these platforms.
