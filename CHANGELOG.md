@@ -3,13 +3,11 @@
 
 All notable changes to the Color Dash Blitz project will be documented in this file.
 
-## [1.0.0] - 2024-06-13
+## [1.1.0] - 2024-06-15
 
 ### Added
-- **Multi-Platform SDK Bridge**: Centralized `platformSDK` in `src/lib/platform-sdk.ts` for unified handling of Yandex, VK, and Sber platforms.
-- **Build-Time Selection**: Integrated `NEXT_PUBLIC_GAME_PLATFORM` environment variable to toggle SDKs during the build process.
-- **Score Reporting**: Implemented `reportScore` to sync game results with platform leaderboards or social walls.
-- **Automatic Script Injection**: Conditional injection of platform-specific SDK scripts in `src/app/layout.tsx`.
-- **Enhanced Build Scripts**: Updated `package.json` with `build:sber`, `build:vk`, and `build:yandex` to automate deployment workflows.
+- **Automated Marketing Assets**: Created `generate-screenshots.sh` using ImageMagick to procedurally generate localized 16:9 promo screenshots.
+- **Standalone Mode**: Finalized the removal of all Yandex Games references, making the app a fully independent web game.
+- **Enhanced UI**: Improved portrait and landscape responsiveness for small mobile devices.
 
 ... (rest of changelog)

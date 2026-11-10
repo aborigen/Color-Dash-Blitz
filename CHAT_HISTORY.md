@@ -3,11 +3,10 @@
 
 ... (previous entries)
 
-### 17. Multi-Platform SDK Integration Implementation
-- **Task**: Implement SDK integration code for Sber, VK Games, and Yandex Games that is selectable at build time.
+### 18. Automated Marketing Asset Generation
+- **Task**: Create a shell script for ImageMagick to generate promo screenshots with editable text.
 - **Outcome**:
-    - Created `src/lib/platform-sdk.ts` to act as a bridge for platform-specific APIs.
-    - Updated `src/app/layout.tsx` to conditionally load SDK scripts based on the build target.
-    - Modified `src/components/game/GameContainer.tsx` to initialize SDKs and report scores on Game Over.
-    - Enhanced `package.json` build scripts to inject the correct `NEXT_PUBLIC_GAME_PLATFORM` variable.
-    - Validated that the app remains fully static-export compatible while supporting specialized platform features.
+    - Developed `generate-screenshots.sh` in the root directory.
+    - Implemented localized (EN/RU) text support within the script.
+    - Added decorative radial gradients and layout logic for professional-grade 1280x720 screenshots.
+    - Provided an easy-to-edit configuration block for future marketing updates.
